@@ -1,4 +1,5 @@
 # Tool di monitoraggio di sistema
+## status: work in progress
 
 # Funzionalità
 Monitora in tempo reale:
