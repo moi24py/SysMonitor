@@ -10,7 +10,7 @@ Monitora in tempo reale:
 - Rete (bandwidth usata)
 
 # Struttura del progetto
-```c
+```shell
 sysmonitor/
 ├── src/
 │   ├── main.c          # Logica principale e loop di aggiornamento
