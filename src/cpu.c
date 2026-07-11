@@ -31,7 +31,6 @@ stat_t* get_stats(FILE* file){
         perror("Errore fseek().");
         exit(EXIT_FAILURE);
     }
-
     return stats;
 }
 
@@ -40,4 +39,30 @@ void print_stats(stat_t* stats){
     printf("cpu  %llu %llu %llu %llu %llu %llu %llu %llu %llu %llu\n",
         stats->user, stats->nice, stats->system, stats->idle, stats->iowait,
         stats->irq, stats->softirq, stats->steal, stats->guest, stats->guest_nice);
+}
+
+// Calcolo tempi: totale e idle
+stat_tot_idle_t* sum_total(stat_t *stats){
+    stat_tot_idle_t *sums = (stat_tot_idle_t*) malloc(sizeof(stat_tot_idle_t));
+    if (sums==NULL){
+         perror("Impossibile allocare in memoria per stat_tot_idle");
+         exit(EXIT_FAILURE);
+    }
+
+    sums->total = 
+            stats->user + stats->nice + stats->system + stats->idle +
+            stats->iowait + stats->irq + stats->softirq + stats->steal +
+            stats->guest + stats->guest_nice;
+
+    sums->idle = stats->idle + stats->iowait;
+    return sums;
+}
+
+// Calcolo utilizzo totale CPU 
+// tempo non idle tra due rilevazioni, espresso in percentuale
+double total_CPU_time(stat_tot_idle_t* sum1, stat_tot_idle_t* sum2){
+    double idles = (double)sum1->idle - (double)sum2->idle;
+    double totals = (double)sum1->total - (double)sum2->total;
+    double usage = 100.0 * (1.0 - idles / totals);
+    return usage;
 }
