@@ -1,8 +1,8 @@
 #include <stdio.h>
 #ifndef _SYSMONITOR_H
 #define _SYSMONITOR_H
-
-// Struttura che memorizza i valori delle statistiche di sistema
+#define MAX_CPUS 256
+// Struttura che memorizza i valori dei rilevamenti della CPU
 typedef struct stat{
     unsigned long long user;
     unsigned long long nice;
@@ -16,23 +16,26 @@ typedef struct stat{
     unsigned long long guest_nice;
 } stat_t;
 
+// Struttura che memorizza 
 typedef struct {
     unsigned long long total;
     unsigned long long idle;
 } stat_tot_idle_t;
 
 
-/* Funzione che legge la prima riga del file proc/stat,
- e ritorna un oggetto di tipo stat_t con i valori letti */
-stat_t* get_stats(FILE *file);
+/* Funzione che estrapola dati rilevazioni CPU */
+int parse_stats(stat_t *cpu_stat);
 
 // Funzione che stampa l'oggetto statistiche
 void print_stats(stat_t* stats);
 
 // Calcolo tempi: totale e idle
-stat_tot_idle_t* sum_total(stat_t *stats);
+stat_tot_idle_t* sum_total(stat_t *cpu_stats);
 
-// // Calcolo utilizzo totale CPU
+// Calcolo utilizzo totale CPU (tutti i core)
 double total_CPU_time(stat_tot_idle_t* sum1, stat_tot_idle_t* sum2);
+
+// Funzione che estrapola i dati delle rilevazioni CPU e calcola l'utilizzo in percentuale
+void get_CPU_usage();
 
 #endif
