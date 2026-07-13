@@ -14,26 +14,26 @@ typedef struct stat{
     unsigned long long steal;
     unsigned long long guest;
     unsigned long long guest_nice;
-} stat_t;
+} cpu_stat_t;
 
 // Struttura che memorizza 
 typedef struct {
     unsigned long long total;
     unsigned long long idle;
-} stat_tot_idle_t;
+} cpu_stat_tot_idle_t;
 
 
 /* Funzione che estrapola dati rilevazioni CPU */
-int parse_stats(stat_t *cpu_stat);
+int parse_stats(cpu_stat_t *cpu_stat);
 
 // Funzione che stampa l'oggetto statistiche
-void print_stats(stat_t* stats);
+void print_stats(cpu_stat_t* stats);
 
 // Calcolo tempi: totale e idle
-stat_tot_idle_t* sum_total(stat_t *cpu_stats);
+cpu_stat_tot_idle_t* sum_total(cpu_stat_t *cpu_stats);
 
 // Calcolo utilizzo totale CPU (tutti i core)
-double total_CPU_time(stat_tot_idle_t* sum1, stat_tot_idle_t* sum2);
+double total_CPU_time(cpu_stat_tot_idle_t* sum1, cpu_stat_tot_idle_t* sum2);
 
 // Funzione che estrapola i dati delle rilevazioni CPU e calcola l'utilizzo in percentuale
 void get_CPU_usage();

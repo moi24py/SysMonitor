@@ -6,7 +6,7 @@
 #include "../include/sysmonitor.h"
 
 // Estrapolazione dati rilevazioni CPU
-int parse_stats(stat_t *cpu_stat){
+int parse_stats(cpu_stat_t *cpu_stat){
     // Apertura file e gestione eventuale fallimento
     FILE *fp = fopen("/proc/stat", "r");
     if (fp == NULL){
@@ -56,15 +56,15 @@ int parse_stats(stat_t *cpu_stat){
 }
 
 // Stampa statistiche
-void print_stats(stat_t* stats){
+void print_stats(cpu_stat_t* stats){
     printf("cpu %llu %llu %llu %llu %llu %llu %llu %llu %llu %llu\n",
         stats->user, stats->nice, stats->system, stats->idle, stats->iowait,
         stats->irq, stats->softirq, stats->steal, stats->guest, stats->guest_nice);
 }
 
 // Calcolo tempi: totale e idle
-stat_tot_idle_t* sum_total(stat_t *cpu_stats){
-    stat_tot_idle_t *sums = (stat_tot_idle_t*) malloc(sizeof(stat_tot_idle_t));
+cpu_stat_tot_idle_t* sum_total(cpu_stat_t *cpu_stats){
+    cpu_stat_tot_idle_t *sums = (cpu_stat_tot_idle_t*) malloc(sizeof(cpu_stat_tot_idle_t));
     if (sums==NULL){
          perror("Error: not enough memory to allocate stat_tot_idle [cpu.c sum_total()]");
          exit(EXIT_FAILURE);
@@ -81,7 +81,7 @@ stat_tot_idle_t* sum_total(stat_t *cpu_stats){
 
 // Calcolo utilizzo totale CPU (tutti i core)
 // Valore di ritorno: tempo non idle tra due rilevazioni, espresso in percentuale
-double total_CPU_time(stat_tot_idle_t* sum1, stat_tot_idle_t* sum2){
+double total_CPU_time(cpu_stat_tot_idle_t* sum1, cpu_stat_tot_idle_t* sum2){
     double idles = (double)sum1->idle - (double)sum2->idle;
     double totals = (double)sum1->total - (double)sum2->total;
     double usage = 100.0 * (1.0 - idles / totals);
@@ -92,14 +92,14 @@ double total_CPU_time(stat_tot_idle_t* sum1, stat_tot_idle_t* sum2){
 // calcola il tempo non idle tra due rilevazioni, e lo stampa espresso in percentuale 
 void get_CPU_usage(){
     // Array per le rilevazioni iniziali: CPU totale e ciacun core
-    stat_t stats1[MAX_CPUS];
+    cpu_stat_t stats1[MAX_CPUS];
     // Lettura dati rilevazioni iniziali
     int cpus_qty = parse_stats(stats1);
 
     sleep(1);
 
     // Array per le rilevazioni finali: CPU totale e ciacun core
-    stat_t stats2[MAX_CPUS];
+    cpu_stat_t stats2[MAX_CPUS];
     // Lettura dati rilevazioni finali
     parse_stats(stats2);
 
