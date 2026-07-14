@@ -13,7 +13,6 @@ Monitor in real time::
 ```shell
 sysmonitor/
 ├── src/
-│   ├── main.c          # Main logic and update loop
 │   ├── cpu.c           # CPU monitoring functions
 │   ├── mem.c           # RAM monitoring functions
 │   ├── disk.c          # Disk monitoring functions
@@ -22,6 +21,9 @@ sysmonitor/
 ├── include/
 │   ├── sysmonitor.h    # Header with definitions and prototypes
 │   └── colors.h        # ANSI color definitions header
+├── tools/
+│   └── main.c          # Main logic and update loop
+├── build/              # Object files and executable
 ├── Makefile            # Automatic compilation
 └── README.md           # Project information and instructions
 
