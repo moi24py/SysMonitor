@@ -34,12 +34,23 @@ int parse_mem(mem_stat_t *mem){
         fclose(fp);
         return EXIT_FAILURE;
     }
-
 	// Chiusura del file e gestione dell'eventuale fallimento
     if (fclose(fp) != 0) {
         perror("fclose");
         return EXIT_FAILURE;
     }
-
     return EXIT_SUCCESS;
+}
+
+void print_mem(mem_stat_t *mem){
+    printf("Total memory: %12llu KB\n", mem->mem_total);
+    printf("Free memory: %13llu KB\n", mem->mem_free);
+    printf("Available memory: %8llu KB\n", mem->mem_available);
+}
+
+// Function that gets memory data and prints them
+void get_memory_usage(){
+    mem_stat_t mem;
+    parse_mem(&mem);
+    print_mem(&mem);
 }
