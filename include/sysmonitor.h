@@ -1,9 +1,13 @@
 #include <stdio.h>
+
 #ifndef _SYSMONITOR_H
 #define _SYSMONITOR_H
+
+/* ### CPU ### */
 #define MAX_CPUS 256
-// Struttura che memorizza i valori dei rilevamenti della CPU
-typedef struct stat{
+
+// Struct that stores CPU measurement values
+typedef struct cpu_stat{
     unsigned long long user;
     unsigned long long nice;
     unsigned long long system;
@@ -16,26 +20,41 @@ typedef struct stat{
     unsigned long long guest_nice;
 } cpu_stat_t;
 
-// Struttura che memorizza 
+// Struct that stores active and idle CPU data
 typedef struct {
     unsigned long long total;
     unsigned long long idle;
 } cpu_stat_tot_idle_t;
 
+// Struct that stores memory statistics
+typedef struct mem_stat{
+    unsigned long long mem_total;
+    unsigned long long mem_free;
+    unsigned long long mem_available;
+} mem_stat_t;
 
-/* Funzione che estrapola dati rilevazioni CPU */
+// Retrieves CPU measurement data
 int parse_stats(cpu_stat_t *cpu_stat);
 
-// Funzione che stampa l'oggetto statistiche
+// Prints CPU statistics
 void print_stats(cpu_stat_t* stats);
 
-// Calcolo tempi: totale e idle
+// Computes time values: total and idle
 cpu_stat_tot_idle_t* sum_total(cpu_stat_t *cpu_stats);
 
-// Calcolo utilizzo totale CPU (tutti i core)
+// Computes total CPU utilization (all cores)
 double total_CPU_time(cpu_stat_tot_idle_t* sum1, cpu_stat_tot_idle_t* sum2);
 
-// Funzione che estrapola i dati delle rilevazioni CPU e calcola l'utilizzo in percentuale
+// Function that extracts CPU measurement data and computes utilization in percentage
 void get_CPU_usage();
+
+// Function that retrieves memory statistics
+int parse_mem(mem_stat_t *mem);
+
+// Prints memory statistics
+void print_mem(mem_stat_t *mem);
+
+// Retrieves memory statistics and prints them
+void get_memory_usage();
 
 #endif
