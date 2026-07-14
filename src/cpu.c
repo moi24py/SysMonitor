@@ -5,16 +5,16 @@
 #include <unistd.h>
 #include "../include/sysmonitor.h"
 
-// Estrapolazione dati rilevazioni CPU
+// Retrieves CPU measurement data
 int parse_stats(cpu_stat_t *cpu_stat){
-    // Apertura file e gestione eventuale fallimento
+    // Opens the file and handles errors, if they occur
     FILE *fp = fopen("/proc/stat", "r");
     if (fp == NULL){
         perror("Error: Failed to open file /proc/stat [ cpu.c parse_stats() ]");
         exit(EXIT_FAILURE);
     }
 
-    // Lettura dal file ed estrapolazione rilevazioni CPU
+    // Reads file and retrieves CPU statistics
     char line[512];
     int read = 0;
     size_t cpus = 0;
@@ -31,7 +31,7 @@ int parse_stats(cpu_stat_t *cpu_stat){
                     &(cpu_stat[cpus].steal),
                     &(cpu_stat[cpus].guest),
                     &(cpu_stat[cpus].guest_nice) );
-                    //print_stats(&cpu_stat[cpus]);
+                    
             if (read < 10){
                 fprintf(stderr, "Error: Failed to parse file /proc/stat [/cpu.c parse_stats()]\n");
                 exit(EXIT_FAILURE);
@@ -40,14 +40,14 @@ int parse_stats(cpu_stat_t *cpu_stat){
         }
     }
 
-    // Testa la causa del fallimento della lettura
+    // Checks potential causes of read failure
     if (ferror(fp)) {
         perror("fgets");
         fclose(fp);
         return EXIT_FAILURE;
     }
 
-	// Chiusura del file e gestione dell'eventuale fallimento
+	// Closes the file and handles errors, if they occur
     if (fclose(fp) != 0) {
         perror("fclose");
         return EXIT_FAILURE;
@@ -55,14 +55,14 @@ int parse_stats(cpu_stat_t *cpu_stat){
     return cpus;
 }
 
-// Stampa statistiche
+// Prints CPU statistics
 void print_stats(cpu_stat_t* stats){
     printf("cpu %llu %llu %llu %llu %llu %llu %llu %llu %llu %llu\n",
         stats->user, stats->nice, stats->system, stats->idle, stats->iowait,
         stats->irq, stats->softirq, stats->steal, stats->guest, stats->guest_nice);
 }
 
-// Calcolo tempi: totale e idle
+// Computes time values: total and idle
 cpu_stat_tot_idle_t* sum_total(cpu_stat_t *cpu_stats){
     cpu_stat_tot_idle_t *sums = (cpu_stat_tot_idle_t*) malloc(sizeof(cpu_stat_tot_idle_t));
     if (sums==NULL){
@@ -79,8 +79,7 @@ cpu_stat_tot_idle_t* sum_total(cpu_stat_t *cpu_stats){
     return sums;
 }
 
-// Calcolo utilizzo totale CPU (tutti i core)
-// Valore di ritorno: tempo non idle tra due rilevazioni, espresso in percentuale
+// Computes total CPU utilization (all cores)
 double total_CPU_time(cpu_stat_tot_idle_t* sum1, cpu_stat_tot_idle_t* sum2){
     double idles = (double)sum1->idle - (double)sum2->idle;
     double totals = (double)sum1->total - (double)sum2->total;
@@ -88,22 +87,19 @@ double total_CPU_time(cpu_stat_tot_idle_t* sum1, cpu_stat_tot_idle_t* sum2){
     return usage;
 }
 
-// Funzione che estrapola i dati di rilevazione dell'utilizzo della CPU,
-// calcola il tempo non idle tra due rilevazioni, e lo stampa espresso in percentuale 
+// Function that extracts CPU measurement data and computes utilization in percentage
 void get_CPU_usage(){
-    // Array per le rilevazioni iniziali: CPU totale e ciacun core
+    // Array that stores initial CPU statistics: total and per-core
     cpu_stat_t stats1[MAX_CPUS];
-    // Lettura dati rilevazioni iniziali
+    // Reads initial CPU statistics
     int cpus_qty = parse_stats(stats1);
-
     sleep(1);
-
-    // Array per le rilevazioni finali: CPU totale e ciacun core
+    // Array that stores final CPU statistics: total and per-core
     cpu_stat_t stats2[MAX_CPUS];
-    // Lettura dati rilevazioni finali
+    // Reads final CPU statistics
     parse_stats(stats2);
 
-    // Calcolo tempo di utilizzo CPU totale
+    // Computes CPU usage time
     int cpu_n = 0;
     double usage = 0;
     while(cpu_n < cpus_qty){
