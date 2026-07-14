@@ -1,28 +1,28 @@
-# Tool di monitoraggio di sistema
-## status: work in progress
+# System Monitoring Tool
+## Status: Work in Progress
 
-# Funzionalità
-Monitora in tempo reale:
-- CPU (uso totale e per core)
-- RAM (totale, usata, libera)
-- Disco (spazio totale, usato, libero)
-- Processi attivi (PID, nome, stato)
-- Rete (bandwidth usata)
+# Features
+Monitor in real time::
+- CPU (total usage and per core)
+- RAM (total, used, available)
+- Disk (total, used, available space)
+- Active processes (PID, name, state)
+- Network (used bandwidth)
 
-# Struttura del progetto
+# Project Structure
 ```shell
 sysmonitor/
 ├── src/
-│   ├── main.c          # Logica principale e loop di aggiornamento
-│   ├── cpu.c           # Funzioni per monitoraggio CPU
-│   ├── mem.c           # Funzioni per monitoraggio RAM
-│   ├── disk.c          # Funzioni per monitoraggio Disco
-│   ├── proc.c          # Funzioni per monitoraggio Processi
-│   └── display.c       # Funzioni per visualizzazione a schermo
+│   ├── main.c          # Main logic and update loop
+│   ├── cpu.c           # CPU monitoring functions
+│   ├── mem.c           # RAM monitoring functions
+│   ├── disk.c          # Disk monitoring functions
+│   ├── proc.c          # Process monitoring functions
+│   └── display.c       # Screen rendering functions
 ├── include/
-│   ├── sysmonitor.h    # Header con definizioni e prototipi
-│   └── colors.h        # Header per colori ANSI
-├── Makefile            # Compilazione automatica
-└── README.md           # Informazioni ed istruzioni
+│   ├── sysmonitor.h    # Header with definitions and prototypes
+│   └── colors.h        # ANSI color definitions header
+├── Makefile            # Automatic compilation
+└── README.md           # Project information and instructions
 
 ```
