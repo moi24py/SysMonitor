@@ -1,9 +1,11 @@
 #include <stdio.h>
+#include <stdbool.h>
 
 #ifndef _SYSMONITOR_H
 #define _SYSMONITOR_H
 
-/* ### CPU ### */
+// ############################## CPU ################################ 
+
 #define MAX_CPUS 256
 
 // Struct that stores CPU measurement values
@@ -48,6 +50,8 @@ double total_CPU_time(cpu_stat_tot_idle_t* sum1, cpu_stat_tot_idle_t* sum2);
 // Function that extracts CPU measurement data and computes utilization in percentage
 void get_CPU_usage();
 
+// ############################ MEMORY ################################ 
+
 // Function that retrieves memory statistics
 int parse_mem(mem_stat_t *mem);
 
@@ -56,5 +60,19 @@ void print_mem(mem_stat_t *mem);
 
 // Retrieves memory statistics and prints them
 void get_memory_usage();
+
+// ############################ DISK ################################ 
+
+// Struct that stores filesystem name
+typedef struct disk{
+    char mount[512];
+    char fstype[512];
+} disk_t;
+
+// Checks if the filesystem type is virtual
+bool is_ignored_fstype(char *s);
+
+// Retrieves mounted filesystems (pseudo-fs excluded)
+int retrieve_fs();
 
 #endif
