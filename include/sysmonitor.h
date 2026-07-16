@@ -63,16 +63,34 @@ void get_memory_usage();
 
 // ############################ DISK ################################ 
 
+#define MAX_FS 256
+
 // Struct that stores filesystem name
 typedef struct disk{
     char mount[512];
-    char fstype[512];
+    char fstype[32];
+    bool pseudo;
 } disk_t;
 
 // Checks if the filesystem type is virtual
-bool is_ignored_fstype(char *s);
+bool is_pseudo_fstype(char *s);
 
 // Retrieves mounted filesystems (pseudo-fs excluded)
-int retrieve_fs();
+disk_t* retrieve_fs();
+
+// Asks the user if pseudo-filesystems should be shown
+bool want_overlay();
+
+// Prints an array of disk_t structures that store filesystem data
+void print_fs_stats(disk_t *fs, int overlay);
+
+// Human readable bytes
+void human_read(const unsigned long long bytes, char *out, size_t out_s);
+
+// Prompts the user to decide whether to include pseudo-filesystems
+bool want_overlay();
+
+// Retrieves and prints disk stats
+void get_disk_stats();
 
 #endif
