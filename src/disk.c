@@ -1,9 +1,14 @@
+/* TODO:
+    1) filter pseudo-fs in print_fs_stats()
+    2) fix printf table
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include <ctype.h>
 #include <sys/statvfs.h>
+#include <sys/types.h>
 #include "../include/sysmonitor.h"
 
 // Array that lists pseudo-filesystem types
@@ -29,27 +34,85 @@ size_t const size_ignored_fstype = 15;
 // Checks if the filesystem type is virtual
 bool is_pseudo_fstype(char *fsname){
     size_t i;
-    bool is_ign = false;
     for(i=0; i<size_ignored_fstype; i++){
         if ( strncmp(fsname, pseudo_fstype[i], strlen(fsname)) == 0 ){
-            //printf("UGUALI: [fsname: %s] [ignored_fstype: %s]\n\n", fsname, ignored_fstype[i]);
             return true;
         }
     }
     return false;
 }
 
-void print_fs_array(disk_t *fs){
-    printf("        FSTYPE                   PSEUDO      MOUNT POINT\n");
+// Human readable bytes
+void human_read(const unsigned long long bytes, char *out, size_t out_s){
+    const char *units[] = {"B", "KiB", "MiB", "GiB", "TiB", "PiB"};
+    double human_read = (double)bytes;
+    int i=0;
+    int max_i = (int)(sizeof(units)/sizeof(units[0]))-1;
+
+    while(human_read >= 1024.0 && i < max_i){
+        human_read /= 1024.0;
+        i++;
+    }
+
+    if (i==0) snprintf(out, out_s, "%llu %s", bytes, units[i]);
+    else snprintf(out, out_s, "%.1f %s", human_read, units[i]);
+}
+
+// Clears STDIN
+void clear_stdin_line() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) { }
+}
+
+// Prompts the user to decide whether to include pseudo-filesystems
+bool want_overlay() {
+    int max_attempts = 4;
+    while (max_attempts--) {
+        printf("Include pseudo-filesystems as well? (y/n): ");
+        char reply[4];
+        if (!fgets(reply, sizeof reply, stdin)) return false;
+        if (strchr(reply, '\n') == NULL) clear_stdin_line(); // input greater than 4 chars
+        if (reply[0] == 'y' || reply[0] == 'Y') return true;
+        if (reply[0] == 'n' || reply[0] == 'N') return false;
+    }
+    return false;
+}
+
+// Prints an array of disk_t structures that store filesystem data
+void print_fs_stats(disk_t *fs, int overlay){
+    struct statvfs stats;
+    char human_bytes[50];
+    size_t human_bytes_s = 50;
+    unsigned long long total_bytes, avail_space, used_space;
+
+    printf("FSTYPE                   PSEUDO      MOUNT POINT        TOTAL    FREE     USED\n");
     for(size_t i=0; i<MAX_FS; i++){
         char s = (fs+i)->fstype[0];
-        if (s != '\0' &&  isalpha(s))
-            printf("#%-3ld    %-20s     %d           %s\n", i+1, (fs+i)->fstype, (fs+i)->pseudo, (fs+i)->mount);
+        if (s != '\0' &&  isalpha(s)){
+            if (statvfs(fs[i].mount, &stats) != 0)
+                printf("#%-3ld    N/A                  %s \n", i+1, (fs+i)->mount);
+            else {
+                printf("#%-3ld    %-20s     %d           %s    ", 
+                    i+1, (fs+i)->fstype, (fs+i)->pseudo, (fs+i)->mount);
+    
+                total_bytes = stats.f_blocks * stats.f_frsize;
+                avail_space = stats.f_bavail * stats.f_frsize;
+                used_space = total_bytes - avail_space;
+                
+                human_read(total_bytes, human_bytes, human_bytes_s);
+                printf("%6s ", human_bytes);
+                human_read(avail_space, human_bytes, human_bytes_s);
+                printf("%6s ", human_bytes);
+                human_read(used_space, human_bytes, human_bytes_s);
+                printf("%6s\n", human_bytes);
+            }
+        }
     }
 }
 
+
 // Retrieves mounted filesystems (pseudo-fs excluded)
-int retrieve_fs(){
+disk_t* retrieve_fs(){
     FILE *fp = fopen("/proc/mounts", "r");
     if (fp == NULL){
         perror("Error: failed to open /proc/mounts");
@@ -57,24 +120,20 @@ int retrieve_fs(){
     }
 
     // Struct that stores filesystems name and mount point 
-    disk_t fsys[MAX_FS];
-
+    disk_t* fsys = (disk_t*) malloc(sizeof(disk_t)*MAX_FS);
     char line[1024];
     int fsys_qty = 0;
-    int num = 1;
     // Retrieve filesystems type and mount point
     while( fgets(line, sizeof(line), fp) != NULL ){
         // Filters out mounts with virtual filesystem fstype (e.g., procfs/sysfs/tmpfs)
         // so the disk report focuses on real storage. Optionally includes virtual filesystems
-        sscanf(line, "%*s %s %s", fsys[fsys_qty].mount, fsys[fsys_qty].fstype);
+        sscanf(line, "%*s %s %s", (fsys+fsys_qty)->mount, (fsys+fsys_qty)->fstype);
         //printf("%2d ] fstype: %s\n", num++, fsys[fsys_qty].fstype);
         //printf("     mount point:%s\n", fsys[fsys_qty].mount);
-        if (is_pseudo_fstype(fsys[fsys_qty].fstype)) fsys[fsys_qty].pseudo = true;
-        else fsys[fsys_qty].pseudo = false;
+        if (is_pseudo_fstype((fsys+fsys_qty)->fstype)) (fsys+fsys_qty)->pseudo = true;
+        else (fsys+fsys_qty)->pseudo = false;
         fsys_qty++;
     }
-
-    print_fs_array(fsys);
 
     if(ferror(fp)){
         perror("Error: failed to read /proc/mounts");
@@ -87,5 +146,12 @@ int retrieve_fs(){
     }
     printf("There are %d mounted filesystems\n", fsys_qty);
 
-    return EXIT_SUCCESS;
+    return fsys;
+}
+
+// Retrieves and prints disk stats
+void get_disk_stats(){
+    disk_t *fsys = retrieve_fs();
+    bool overlay = want_overlay();
+    print_fs_stats(fsys, overlay);
 }
