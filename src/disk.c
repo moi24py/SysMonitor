@@ -1,7 +1,3 @@
-/* TODO:
-    1) filter pseudo-fs in print_fs_stats()
-    2) fix printf table
-*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -31,39 +27,12 @@ const char *pseudo_fstype[] = {
 };
 size_t const size_ignored_fstype = 15;
 
-// Checks if the filesystem type is virtual
-bool is_pseudo_fstype(char *fsname){
-    size_t i;
-    for(i=0; i<size_ignored_fstype; i++){
-        if ( strncmp(fsname, pseudo_fstype[i], strlen(fsname)) == 0 ){
-            return true;
-        }
-    }
-    return false;
-}
 
-// Human readable bytes
-void human_read(const unsigned long long bytes, char *out, size_t out_s){
-    const char *units[] = {"B", "KiB", "MiB", "GiB", "TiB", "PiB"};
-    double human_read = (double)bytes;
-    int i=0;
-    int max_i = (int)(sizeof(units)/sizeof(units[0]))-1;
-
-    while(human_read >= 1024.0 && i < max_i){
-        human_read /= 1024.0;
-        i++;
-    }
-
-    if (i==0) snprintf(out, out_s, "%llu %s", bytes, units[i]);
-    else snprintf(out, out_s, "%.1f %s", human_read, units[i]);
-}
-
-// Clears STDIN
+// Clears STDIN for want_overlay()
 void clear_stdin_line() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF) { }
 }
-
 // Prompts the user to decide whether to include pseudo-filesystems
 bool want_overlay() {
     int max_attempts = 4;
@@ -77,39 +46,6 @@ bool want_overlay() {
     }
     return false;
 }
-
-// Prints an array of disk_t structures that store filesystem data
-void print_fs_stats(disk_t *fs, int overlay){
-    struct statvfs stats;
-    char human_bytes[50];
-    size_t human_bytes_s = 50;
-    unsigned long long total_bytes, avail_space, used_space;
-
-    printf("FSTYPE                   PSEUDO      MOUNT POINT        TOTAL    FREE     USED\n");
-    for(size_t i=0; i<MAX_FS; i++){
-        char s = (fs+i)->fstype[0];
-        if (s != '\0' &&  isalpha(s)){
-            if (statvfs(fs[i].mount, &stats) != 0)
-                printf("#%-3ld    N/A                  %s \n", i+1, (fs+i)->mount);
-            else {
-                printf("#%-3ld    %-20s     %d           %s    ", 
-                    i+1, (fs+i)->fstype, (fs+i)->pseudo, (fs+i)->mount);
-    
-                total_bytes = stats.f_blocks * stats.f_frsize;
-                avail_space = stats.f_bavail * stats.f_frsize;
-                used_space = total_bytes - avail_space;
-                
-                human_read(total_bytes, human_bytes, human_bytes_s);
-                printf("%6s ", human_bytes);
-                human_read(avail_space, human_bytes, human_bytes_s);
-                printf("%6s ", human_bytes);
-                human_read(used_space, human_bytes, human_bytes_s);
-                printf("%6s\n", human_bytes);
-            }
-        }
-    }
-}
-
 
 // Retrieves mounted filesystems (pseudo-fs excluded)
 disk_t* retrieve_fs(){
@@ -148,6 +84,90 @@ disk_t* retrieve_fs(){
 
     return fsys;
 }
+
+// Checks if the filesystem type is virtual
+bool is_pseudo_fstype(char *fsname){
+    size_t i;
+    for(i=0; i<size_ignored_fstype; i++){
+        if ( strncmp(fsname, pseudo_fstype[i], strlen(fsname)) == 0 ){
+            return true;
+        }
+    }
+    return false;
+}
+
+
+// Computes a filesystem total, free and used space
+void compute_fs_space(disk_t *fs, struct statvfs *stats){
+    fs->total_space = stats->f_blocks * stats->f_frsize;
+    fs->free_space = stats->f_bavail * stats->f_frsize;
+    fs->used_space = fs->total_space - fs->free_space;
+}
+
+// Converts bytes to human readable bytes and prints the result
+char* human_readable(const unsigned long long bytes){
+    const char *units[] = {"B", "KiB", "MiB", "GiB", "TiB", "PiB"};
+    double human_read = (double)bytes;
+    int i=0;
+    int max_i = (int)(sizeof(units)/sizeof(units[0]))-1;
+
+    while(human_read >= 1024.0 && i < max_i){
+        human_read /= 1024.0;
+        i++;
+    }
+    size_t human_bytes_s = 50;
+    char *human_bytes = (char*) malloc(sizeof(char)*human_bytes_s);
+
+    if (i==0) snprintf(human_bytes, human_bytes_s, "%llu %s", bytes, units[i]);
+    else snprintf(human_bytes, human_bytes_s, "%.1f %s", human_read, units[i]);
+    
+    return human_bytes;
+}
+
+// Prints an array of disk_t struct that stores filesystem data
+void print_fs_stats(disk_t *fs, int overlay){
+    struct statvfs stats;
+    printf("%3s | %-30s | %-5s | %-60s | %-10s | %-10s | %-10s\n", "#", "FSTYPE", "PSEUDO", "MOUNT POINT", "TOTAL", "FREE", "USED");
+    printf("%3s---%30s---%5s--%40s---%10s---%10s---%10s\n",
+        "---", "------------------------------", "----------", "------------------------------------------------------------", "----------", "----------", "----------");
+    for(size_t i=0; i<MAX_FS; i++){
+        char s = (fs+i)->fstype[0];
+        if (s != '\0' &&  isalpha(s)){
+            // Shows non-pseudo filesystems only
+            if (overlay == 0 && (fs+i)->pseudo == false){
+                if (statvfs((fs+i)->mount, &stats) != 0) printf("%3ld | %-30s | %-5s | %-60s | %-10s | %-10s | %-10s\n", i+1, "N/A", "N/A", (fs+i)->mount, "N/A", "N/A", "N/A");
+                else{
+                    compute_fs_space(fs+i, &stats);
+                    printf("%3ld | %-30s | %-5s | %-60s | %-10s | %-10s | %-10s\n",
+                        i+1,
+                        (fs+i)->fstype,
+                        (fs+i)->pseudo ? "yes" : "no",
+                        (fs+i)->mount,
+                        human_readable((fs+i)->total_space),
+                        human_readable((fs+i)->free_space),
+                        human_readable((fs+i)->used_space)
+                    );
+                }
+            } // Shows all filesystems
+            else if (overlay == 1){
+                if (statvfs((fs+i)->mount, &stats) != 0) printf("%3ld | %-30s | %-5s | %-60s | %-10s | %-10s | %-10s\n", i+1, "N/A", "N/A", (fs+i)->mount, "N/A", "N/A", "N/A");
+                else{
+                    compute_fs_space(fs+i, &stats);
+                    printf("%3ld | %-30s | %-5s | %-60s | %-10s | %-10s | %-10s\n",
+                        i+1,
+                        (fs+i)->fstype,
+                        (fs+i)->pseudo ? "yes" : "no",
+                        (fs+i)->mount,
+                        human_readable((fs+i)->total_space),
+                        human_readable((fs+i)->free_space),
+                        human_readable((fs+i)->used_space)
+                    );
+                }
+            }
+        }
+    }
+}
+
 
 // Retrieves and prints disk stats
 void get_disk_stats(){
