@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <sys/statvfs.h>
+
 
 #ifndef _SYSMONITOR_H
 #define _SYSMONITOR_H
@@ -70,6 +72,9 @@ typedef struct disk{
     char mount[512];
     char fstype[32];
     bool pseudo;
+    unsigned long long total_space;
+    unsigned long long free_space;
+    unsigned long long used_space;
 } disk_t;
 
 // Checks if the filesystem type is virtual
@@ -85,10 +90,13 @@ bool want_overlay();
 void print_fs_stats(disk_t *fs, int overlay);
 
 // Human readable bytes
-void human_read(const unsigned long long bytes, char *out, size_t out_s);
+char* human_readable(const unsigned long long bytes);
 
 // Prompts the user to decide whether to include pseudo-filesystems
 bool want_overlay();
+
+// Computes a filesystem total, free and used space
+void compute_fs_space(disk_t *fs, struct statvfs *stats);
 
 // Retrieves and prints disk stats
 void get_disk_stats();
