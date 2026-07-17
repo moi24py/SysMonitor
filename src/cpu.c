@@ -104,7 +104,7 @@ void get_CPU_usage(){
     double usage = 0;
     while(cpu_n < cpus_qty){
        usage = total_CPU_time(sum_total(stats1+cpu_n), sum_total(stats2+cpu_n));
-       printf("L'utilizzo CPU%d è: %.1f%%\n", cpu_n, usage);
+       printf("CPU#%d: %.1f%%\n", cpu_n, usage);
        cpu_n++;
     }
 }
