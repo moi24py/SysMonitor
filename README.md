@@ -2,10 +2,12 @@
 ## Status: Work in Progress
 
 # Features
-Monitor in real time::
+Monitor in real time:
 - CPU (total usage and per core)
 - RAM (total, used, available)
 - Disk (total, used, available space)
+  Note:
+  Default: excludes virtual filesystem mounts (`tmpfs/proc/sysfs/etc.`) and `overlay`. Enable `--include-overlay` to include container overlay mounts.
 - Active processes (PID, name, state)
 - Network (used bandwidth)
 
@@ -17,6 +19,7 @@ sysmonitor/
 │   ├── mem.c           # RAM monitoring functions
 │   ├── disk.c          # Disk monitoring functions
 │   ├── proc.c          # Process monitoring functions
+│   ├── network.c       # Used bandwidth
 │   └── display.c       # Screen rendering functions
 ├── include/
 │   ├── sysmonitor.h    # Header with definitions and prototypes
