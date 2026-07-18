@@ -98,6 +98,9 @@ bool want_overlay();
 // Computes a filesystem total, free and used space
 void compute_fs_space(disk_t *fs, struct statvfs *stats);
 
+// Prints a filesystem total space, free space, used space
+void print_fs_space(disk_t *fs, struct statvfs *stats, size_t i);
+
 // Retrieves and prints disk stats
 void get_disk_stats();
 
