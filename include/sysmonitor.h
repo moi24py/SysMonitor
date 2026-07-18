@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <sys/statvfs.h>
-
+#include <sys/types.h>
 
 #ifndef _SYSMONITOR_H
 #define _SYSMONITOR_H
@@ -103,5 +103,28 @@ void print_fs_space(disk_t *fs, struct statvfs *stats, size_t i);
 
 // Retrieves and prints disk stats
 void get_disk_stats();
+
+// ############################ PROCESS ################################
+
+typedef struct proc{
+    pid_t pid;
+    char name[256];
+    char state[256];
+} proc_t;
+
+typedef struct proc_v{
+    proc_t *ps;
+    size_t count;
+} proc_v_t;
+
+// Retrieves processes PID, name and status
+// Returns an array of struct proc_t
+proc_t* retrieve_processes(size_t *ps_qty);
+
+// Prints a proc_t struc
+void print_processes(proc_t *ps, size_t ps_qty);
+
+// Retrieves and prints processes
+void get_proc();
 
 #endif
