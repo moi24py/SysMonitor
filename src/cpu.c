@@ -103,8 +103,12 @@ void get_CPU_usage(void){
     int cpu_n = 0;
     double usage = 0;
     while(cpu_n < cpus_qty){
-       usage = total_CPU_time(sum_total(stats1+cpu_n), sum_total(stats2+cpu_n));
+       cpu_stat_tot_idle_t* s1 = sum_total(stats1+cpu_n);
+       cpu_stat_tot_idle_t* s2 = sum_total(stats2+cpu_n);
+       usage = total_CPU_time(s1, s2);
        printf("CPU #%d: %.1f%%\n", cpu_n, usage);
        cpu_n++;
+       free(s1);
+       free(s2);
     }
 }
