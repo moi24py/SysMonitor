@@ -106,25 +106,30 @@ void get_disk_stats(void);
 
 // ############################ PROCESS ################################
 
-typedef struct proc{
+// Struct that stores process pid, name and state
+typedef struct {
     pid_t pid;
     char name[256];
     char state[256];
 } proc_t;
 
-typedef struct proc_v{
-    proc_t *ps;
-    size_t count;
+// Struct that stores an array of processes and their quantity 
+typedef struct {
+    proc_t *ps; // dinamic array
+    size_t qty;
 } proc_v_t;
 
 // Retrieves processes PID, name and status
 // Returns an array of struct proc_t
-proc_t* retrieve_processes(size_t *ps_qty);
+proc_v_t* retrieve_processes(void);
 
 // Prints a proc_t struc
-void print_processes(proc_t *ps, size_t ps_qty);
+void print_processes(const proc_v_t *ps);
 
 // Retrieves and prints processes
 void get_proc(void);
+
+// Free
+void free_processes(proc_v_t *psv);
 
 #endif
