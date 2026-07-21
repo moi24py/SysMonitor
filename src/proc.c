@@ -7,51 +7,90 @@
 
 // Retrieves processes PID, name and status
 // Returns an array of struct proc_t
-proc_t* retrieve_processes(size_t *ps_qty){
+proc_v_t* retrieve_processes(void){
    
-    proc_t *ps = (proc_t*) malloc( sizeof(proc_t)*MAX_PROCS );
-    if (ps == NULL){
-        perror("malloc()");
+    // Array that stores processes
+    proc_v_t *psv = (proc_v_t*) malloc( sizeof(*psv));
+    if (psv == NULL){
+        perror("malloc(proc_v_t)");
         exit(EXIT_FAILURE);
     }
-   
-    char path[512];
-    size_t count = 0;
-    for (size_t i = 0; i < MAX_PROCS; i++){
-        // cat /proc/1/status
-        int n = snprintf(path, sizeof(path), "/proc/%zu/status", i);
+
+    psv->qty = 0; // Inizializes the count of stored process information
+    psv->ps = malloc(MAX_PROCS * sizeof(*psv->ps));
+    if (psv->ps == NULL){
+        perror("malloc(proc_t array)");
+        free(psv);
+        exit(EXIT_FAILURE);
+    }
+    
+    char path[512];  // Filepath string
+    /* On Linux, processes are represented under /proc.
+    To retrieve a process PID, name and state, read /proc/<pid>/status */
+    for (size_t pid = 0; pid < MAX_PROCS; pid++){
+        // Concatenates pid with path
+        int n = snprintf(path, sizeof(path), "/proc/%zu/status", pid);
         if (n < 0 || (size_t)n >= sizeof(path)) printf("Errore snprintf\n");
         
-        FILE *fp = fopen(path, "r");
+        FILE *fp = fopen(path, "r"); // Opens /proc/<pid>/status
         if (fp){
-            char line[512];
             bool got_name = false, got_state = false, got_pid = false;
-            int temp;
+            char line[512];
+            // Temporarily stores the PID as an int. After retrieval, it is casted to pid_t and written to the struct proct_t pid field
+            int temp_pid;
+            // Reads /proc/<pid>/status and parses it line by line to get name, state and pid
             while ( fgets(line, sizeof(line), fp) != NULL ){
-                if (sscanf(line, "Name: %255s", (ps+count)->name) == 1) got_name = true;
-                else if (sscanf(line, "State: %255s", (ps+count)->state) == 1) got_state = true;
-                else if (sscanf(line, "Pid: %d", &temp) == 1){
+                if (sscanf(line, "Name: %255s", psv->ps[psv->qty].name) == 1) got_name = true;
+                else if (sscanf(line, "State: %255s", psv->ps[psv->qty].state) == 1) got_state = true;
+                else if (sscanf(line, "Pid: %d", &temp_pid) == 1){
                     got_pid = true;
-                    (ps+count)->pid = (pid_t)temp;
+                    psv->ps[psv->qty].pid = (pid_t)temp_pid;
                 }
             }
             fclose(fp);
-            if (got_name && got_state && got_pid && count < MAX_PROCS) count++;
+            // If the retrieval operation was successful, increment the count of stored process information
+            if (got_name && got_state && got_pid)
+                if (psv->qty < MAX_PROCS) psv->qty++;
+            
         }
     }
-    *ps_qty = count;
-    return ps;
+
+    // If no valid process has been found, free vector memory
+    if (psv->qty == 0){
+        free(psv->ps);
+        psv->ps = NULL;
+        return psv;
+    }
+
+    // Reallocatea the array to the exact size; if realloc fails, keeps the original pointer
+    proc_t *resized = realloc(psv->ps, psv->qty * sizeof(*psv->ps));
+    if (resized == NULL) return psv;
+    psv->ps = resized;
+
+    return psv;
 }
 
 // Prints a proc_t struc
-void print_processes(proc_t *ps, size_t ps_qty){
-    for(size_t i = 0; i < ps_qty; i++)
-        printf("%s %s %d\n", (ps+i)->name, (ps+i)->state, (int)(ps+i)->pid);
+void print_processes(const proc_v_t *psv){
+    for(size_t i = 0; i < psv->qty; i++){
+        printf("PID: %-5d    Name: %-50s State: %-10s\n",
+            (int)psv->ps[i].pid,
+            psv->ps[i].name,
+            psv->ps[i].state
+        );
+    }
 }
 
-// Retrieves and prints processes
+// Frees the allocated memory
+void free_processes(proc_v_t *psv) {
+    if (!psv) return;
+    free(psv->ps); // frees vector
+    free(psv);     // frees container
+}
+
+// Retrieves, prints and frees stored processes vector and information
 void get_proc(void){
-    size_t ps_qty;
-    proc_t * ps = retrieve_processes(&ps_qty);
-    print_processes(ps, ps_qty);
+    proc_v_t * procs_vector = retrieve_processes();
+    print_processes(procs_vector);
+    free_processes(procs_vector);
 }
