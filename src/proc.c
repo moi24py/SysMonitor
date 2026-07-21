@@ -50,7 +50,7 @@ void print_processes(proc_t *ps, size_t ps_qty){
 }
 
 // Retrieves and prints processes
-void get_proc(){
+void get_proc(void){
     size_t ps_qty;
     proc_t * ps = retrieve_processes(&ps_qty);
     print_processes(ps, ps_qty);

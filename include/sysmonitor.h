@@ -50,7 +50,7 @@ cpu_stat_tot_idle_t* sum_total(cpu_stat_t *cpu_stats);
 double total_CPU_time(cpu_stat_tot_idle_t* sum1, cpu_stat_tot_idle_t* sum2);
 
 // Function that extracts CPU measurement data and computes utilization in percentage
-void get_CPU_usage();
+void get_CPU_usage(void);
 
 // ############################ MEMORY ################################ 
 
@@ -61,7 +61,7 @@ int parse_mem(mem_stat_t *mem);
 void print_mem(mem_stat_t *mem);
 
 // Retrieves memory statistics and prints them
-void get_memory_usage();
+void get_memory_usage(void);
 
 // ############################ DISK ################################ 
 
@@ -81,10 +81,10 @@ typedef struct disk{
 bool is_pseudo_fstype(char *s);
 
 // Retrieves mounted filesystems (pseudo-fs excluded)
-disk_t* retrieve_fs();
+disk_t* retrieve_fs(void);
 
 // Asks the user if pseudo-filesystems should be shown
-bool want_overlay();
+bool want_overlay(void);
 
 // Prints an array of disk_t structures that store filesystem data
 void print_fs_stats(disk_t *fs, int overlay);
@@ -93,7 +93,7 @@ void print_fs_stats(disk_t *fs, int overlay);
 char* human_readable(const unsigned long long bytes);
 
 // Prompts the user to decide whether to include pseudo-filesystems
-bool want_overlay();
+bool want_overlay(void);
 
 // Computes a filesystem total, free and used space
 void compute_fs_space(disk_t *fs, struct statvfs *stats);
@@ -102,7 +102,7 @@ void compute_fs_space(disk_t *fs, struct statvfs *stats);
 void print_fs_space(disk_t *fs, struct statvfs *stats, size_t i);
 
 // Retrieves and prints disk stats
-void get_disk_stats();
+void get_disk_stats(void);
 
 // ############################ PROCESS ################################
 
@@ -125,6 +125,6 @@ proc_t* retrieve_processes(size_t *ps_qty);
 void print_processes(proc_t *ps, size_t ps_qty);
 
 // Retrieves and prints processes
-void get_proc();
+void get_proc(void);
 
 #endif

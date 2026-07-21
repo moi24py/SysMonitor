@@ -30,12 +30,12 @@ size_t const size_ignored_fstype = 15;
 
 
 // Clears STDIN for want_overlay()
-void clear_stdin_line() {
+void clear_stdin_line(void) {
     int c;
     while ((c = getchar()) != '\n' && c != EOF) { }
 }
 // Prompts the user to decide whether to include pseudo-filesystems
-bool want_overlay() {
+bool want_overlay(void) {
     int max_attempts = 4;
     while (max_attempts--) {
         printf("Include pseudo-filesystems as well? (y/n): ");
@@ -50,7 +50,7 @@ bool want_overlay() {
 
 
 // Retrieves mounted filesystems (pseudo-fs excluded)
-disk_t* retrieve_fs(){
+disk_t* retrieve_fs(void){
     FILE *fp = fopen("/proc/mounts", "r");
     if (fp == NULL){
         perror("Error: failed to open /proc/mounts");
@@ -170,7 +170,7 @@ void print_fs_stats(disk_t *fs, int overlay){
 
 
 // Retrieves and prints disk stats
-void get_disk_stats(){
+void get_disk_stats(void){
     disk_t *fsys = retrieve_fs();
     bool overlay = want_overlay();
     print_fs_stats(fsys, overlay);

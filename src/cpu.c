@@ -88,7 +88,7 @@ double total_CPU_time(cpu_stat_tot_idle_t* sum1, cpu_stat_tot_idle_t* sum2){
 }
 
 // Function that extracts CPU measurement data and computes utilization in percentage
-void get_CPU_usage(){
+void get_CPU_usage(void){
     // Array that stores initial CPU statistics: total and per-core
     cpu_stat_t stats1[MAX_CPUS];
     // Reads initial CPU statistics
