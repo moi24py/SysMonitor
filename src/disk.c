@@ -133,17 +133,19 @@ void print_fs_space(disk_t *fs, struct statvfs *stats, size_t i){
         printf("%3ld | %-30s | %-5s | %-60s | %-10s | %-10s | %-10s\n", i+1, "N/A", "N/A", (fs)->mount, "N/A", "N/A", "N/A");
     else{
         compute_fs_space(fs+i, stats);
+        char* t = human_readable((fs)->total_space);
+        char *f = human_readable((fs)->free_space);
+        char *u = human_readable((fs)->used_space);
         printf("%3ld | %-30s | %-5s | %-60s | %-10s | %-10s | %-10s\n",
             i+1,
             (fs)->fstype,
             (fs)->pseudo ? "yes" : "no",
             (fs)->mount,
-            human_readable((fs)->total_space),
-            human_readable((fs)->free_space),
-            human_readable((fs)->used_space)
-        );
-    }
-                    
+            t,f,u);
+        free(t);
+        free(f);
+        free(u);
+    }              
 }
 
 
@@ -174,4 +176,5 @@ void get_disk_stats(void){
     disk_t *fsys = retrieve_fs();
     bool overlay = want_overlay();
     print_fs_stats(fsys, overlay);
+    free(fsys);
 }
