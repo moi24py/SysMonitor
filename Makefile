@@ -1,5 +1,5 @@
-all: build/cpu.o build/mem.o build/disk.o build/proc.o
-	gcc -std=c99 -Wall -Wextra -pedantic -O2 -g -I include build/cpu.o build/mem.o build/disk.o build/proc.o tools/main.c -o build/main
+all: build/cpu.o build/mem.o build/disk.o build/proc.o build/network.o
+	gcc -std=c99 -Wall -Wextra -pedantic -O2 -g -I include build/cpu.o build/mem.o build/disk.o build/proc.o build/network.o tools/main.c -o build/main
 
 build/cpu.o: src/cpu.c include/sysmonitor.h
 	gcc -c -std=c99 src/cpu.c -Wall -Wextra -pedantic -O2 -g -I include -o build/cpu.o
@@ -12,6 +12,9 @@ build/disk.o: src/disk.c include/sysmonitor.h
 
 build/proc.o: src/disk.c include/sysmonitor.h
 	gcc -c -std=c99 src/proc.c -Wall -Wextra -pedantic -O2 -g -I include -o build/proc.o
+
+build/network.o: src/network.c include/sysmonitor.h
+	gcc -c -std=c99 src/network.c -Wall -Wextra -pedantic -O2 -g -I include -o build/network.o
 
 clean:
 	rm -r build && mkdir build
