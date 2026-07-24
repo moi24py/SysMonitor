@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "../include/sysmonitor.h"
 
-int retrieve_netstat(net_t *retrieved){
+void retrieve_netstat(net_v_t *retrieved_v){
     FILE *fp = fopen("/proc/net/dev", "r");
     if (fp == NULL){
         perror("Error: failed to open /proc/net/dev");
@@ -10,21 +10,69 @@ int retrieve_netstat(net_t *retrieved){
     }
 
     char line[512];
-    fgets(line, sizeof(line), fp); // skips header line
-    fgets(line, sizeof(line), fp); // skips first line
-
-    // Allocates memory for the interface name
-    retrieved->iface = (char*) malloc(sizeof(char)*50);
-    if (retrieved->iface == NULL){
-        perror("Error: failed to allocate memory");
-        exit(EXIT_FAILURE);
-    }  
-    int read = 0;
-    while ( fgets(line, sizeof(line), fp) ) {
-        read = sscanf(line, "%s %llu %*s %*s %*s %*s %*s %*s %*s %llu %*s %*s %*s %*s %*s %*s %*s", retrieved->iface, &retrieved->rx_bytes, &retrieved->tx_bytes);
-        //printf("%s ]     rx_bytes: %llu       tx_bytes: %llu\n", retrieved->iface, retrieved->rx_bytes, retrieved->tx_bytes);
+    // skips header and first lines
+    for (size_t skip = 1; skip <= 2; skip++){
+        if (!fgets(line, sizeof(line), fp)) {
+            perror("fgets failed");
+            fclose(fp);
+            return;
         }
-    fclose(fp);
-    return read;
+    }
+
+    int parsed = 0;
+    while ( fgets(line, sizeof(line), fp) != NULL ) {
+        if (retrieved_v->count >= MAX_IFACES) break;
+        parsed = sscanf(line, "%63[^:]: %llu %*s %*s %*s %*s %*s %*s %*s %llu %*s %*s %*s %*s %*s %*s %*s",
+            retrieved_v->vector[retrieved_v->count].iface,
+            &retrieved_v->vector[retrieved_v->count].rx_bytes,
+            &retrieved_v->vector[retrieved_v->count].tx_bytes
+        );
+        if ( parsed == 3 ) retrieved_v->count++;
+    }
+    
+    // Checks potential causes of read failure
+    if (ferror(fp)) {
+        perror("fgets");
+        fclose(fp);
+        return;
+    }
+
+	// Closes the file and handles errors, if they occur
+    if (fclose(fp) != 0) {
+        perror("fclose");
+        return;
+    }
 }
 
+void print_net_vector(net_v_t *n){
+    for(int i = 0; i < n->count ; i++)
+        printf("%s:     rx_bytes: %llu       tx_bytes: %llu\n",
+            n->vector[i].iface,
+            n->vector[i].rx_bytes,
+            n->vector[i].tx_bytes
+        );
+}
+
+void get_used_bandwidth(void){
+    net_t* array = (net_t*) malloc(sizeof(net_t)*MAX_IFACES);
+    if (array == NULL){
+        perror("Error: failed to allocate memory");
+        exit(EXIT_FAILURE);
+    }
+
+    net_v_t net_container;
+    net_container.count = 0; // Inizializes the count of stored interface information
+    net_container.vector = array;
+    
+    // Populates the array with retrieved interfaces
+    retrieve_netstat(&net_container);
+    
+    // Reallocates the array to the exact size; if realloc fails, keeps the original pointer
+    net_t *v = realloc(array, net_container.count * sizeof(net_t));
+    if (v == NULL){
+        perror("Error: failed to allocate memory");
+        net_container.vector = array;
+    }
+    net_container.vector = v;
+    print_net_vector(&net_container);
+}
