@@ -121,6 +121,7 @@ computed_net_bytes_t* compute_used_bandwidth(net_v_t* net_sample1, net_v_t* net_
     return computed_bytes;
 }
 
+// Prints out the computed received and transmitted bytes
 void print_net_bytes(computed_net_bytes_t* bytes){
     if (bytes == NULL){
         perror("Error: invalid memory");
@@ -134,8 +135,18 @@ void print_net_bytes(computed_net_bytes_t* bytes){
     );
 }
 
+// Deallocates the dynamically allocated memory
+void free_net(net_v_t* s1, net_v_t* s2){
+    free(s1->vector);
+    free(s2->vector);
+    free(s1);
+    free(s2);
+}
+
+// Retrieves and prints network used bandwidth
 void get_used_bandwidth(void){
 
+    printf("NETWORK: USED BANDWIDTH\n");
     net_v_t* net_sample1 = net_sample();
     print_net_vector(net_sample1);
 
@@ -146,9 +157,6 @@ void get_used_bandwidth(void){
 
     computed_net_bytes_t *bytes = compute_used_bandwidth(net_sample1, net_sample2);
     print_net_bytes(bytes);
-    
-    free(net_sample1->vector);
-    free(net_sample2->vector);
-    free(net_sample1);
-    free(net_sample2);
+
+    free_net(net_sample1, net_sample2);
 }
