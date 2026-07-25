@@ -52,6 +52,7 @@ void print_mem(mem_stat_t *mem){
 
 // Retrieves memory statistics and prints them
 void get_memory_usage(void){
+    printf("MEMORY USAGE\n");
     mem_stat_t mem;
     parse_mem(&mem);
     print_mem(&mem);
