@@ -4,14 +4,26 @@
 #include <stdbool.h>
 #include "../include/sysmonitor.h"
 
-int main(){
+int main(void){
 
-    while(true){
-        get_CPU_usage();
-        get_memory_usage();
-        
-        sleep(3);
-    }
+    int rep = 3;
+    while(rep--){
+        get_proc();
+        printf("\n");
     
-    return 0;
+        get_disk_stats(false);
+        printf("\n");
+    
+        get_CPU_usage();
+        printf("\n");
+
+        get_memory_usage();
+        printf("\n");
+        
+        get_used_bandwidth();
+        printf("\n");
+
+        if (rep > 1) sleep(3);
+    }
+    return EXIT_SUCCESS;
 }
