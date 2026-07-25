@@ -63,6 +63,10 @@ void print_mem(mem_stat_t *mem);
 // Retrieves memory statistics and prints them
 void get_memory_usage(void);
 
+
+
+
+
 // ############################ DISK ################################ 
 
 #define MAX_FS 256
@@ -83,9 +87,6 @@ bool is_pseudo_fstype(char *s);
 // Retrieves mounted filesystems (pseudo-fs excluded)
 disk_t* retrieve_fs(void);
 
-// Asks the user if pseudo-filesystems should be shown
-bool want_overlay(void);
-
 // Prints an array of disk_t structures that store filesystem data
 void print_fs_stats(disk_t *fs, int overlay);
 
@@ -102,7 +103,11 @@ void compute_fs_space(disk_t *fs, struct statvfs *stats);
 void print_fs_space(disk_t *fs, struct statvfs *stats, size_t i);
 
 // Retrieves and prints disk stats
-void get_disk_stats(void);
+void get_disk_stats(bool);
+
+
+
+
 
 // ############################ PROCESS ################################
 
@@ -131,5 +136,51 @@ void get_proc(void);
 
 // Free
 void free_processes(proc_v_t *psv);
+
+
+
+
+
+// ############################ NETWORK ################################
+
+#define MAX_IFACES 20
+
+// Struct that stores an inferface name, recevied bytes and transmitted bytes
+typedef struct {
+    char iface[64];
+    unsigned long long rx_bytes;
+    unsigned long long tx_bytes;
+} net_t;
+
+// Array that stores interfaces (struct net_t)
+typedef struct {
+    net_t *vector;
+    int count;
+} net_v_t;
+
+typedef struct {
+    unsigned long long tot_received;
+    unsigned long long tot_sent;
+    double received_per_sec;
+    double sent_per_sec;
+} computed_net_bytes_t;
+
+// Retrives received and transimetted bytes
+void retrieve_netstat(net_v_t *retrieved);
+
+// Computes received and transimtted bytes
+computed_net_bytes_t* compute_used_bandwidth(net_v_t *net_sample1, net_v_t *net_sample2);
+
+// // Prints out the computed received and transmitted bytes
+void print_net_bytes(computed_net_bytes_t* bytes);
+
+// Prints an array of struct net_t interfaces
+void print_net_vector(net_v_t *v);
+
+// Retrieves and prints network used bandwidth
+void get_used_bandwidth(void);
+
+// Deallocates the dynamically allocated memory
+void free_net(net_v_t* s1, net_v_t* s2);
 
 #endif
