@@ -6,8 +6,6 @@ Monitor in real time:
 - CPU (total usage and per core)
 - RAM (total, used, available)
 - Disk (total, used, available space)
-  Note:
-  Default: excludes virtual filesystem mounts (`tmpfs/proc/sysfs/etc.`) and `overlay`. Enable `--include-overlay` to include container overlay mounts.
 - Active processes (PID, name, state)
 - Network (used bandwidth)
 
@@ -22,8 +20,7 @@ sysmonitor/
 │   ├── network.c       # Used bandwidth
 │   └── display.c       # Screen rendering functions
 ├── include/
-│   ├── sysmonitor.h    # Header with definitions and prototypes
-│   └── colors.h        # ANSI color definitions header
+│   └── sysmonitor.h    # Header with definitions and prototypes
 ├── tools/
 │   └── main.c          # Main logic and update loop
 ├── build/              # Object files and executable
@@ -31,3 +28,8 @@ sysmonitor/
 └── README.md           # Project information and instructions
 
 ```
+
+# References
+- [C reference](https://en.cppreference.com/c)
+
+- [ncurses tutorial](https://github.com/mcdaniel/curses_tutorial) by professor Patrick McDaniel
