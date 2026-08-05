@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "../include/sysmonitor.h"
+
+#include "sysmonitor.h"
 
 #define MAX_PROCS 5000
 
 // Retrieves processes PID, name and status
-// Returns an array of struct proc_t
+// Returns a container struct proc_v_t: an array of processes and its size
 proc_v_t* retrieve_processes(void){
    
     // Array that stores processes
@@ -27,10 +28,10 @@ proc_v_t* retrieve_processes(void){
     char path[512];  // Filepath string
     /* On Linux, processes are represented under /proc.
     To retrieve a process PID, name and state, read /proc/<pid>/status */
-    for (size_t pid = 0; pid < MAX_PROCS; pid++){
+    for (size_t pid = 0; pid < MAX_PROCS; pid++){ // It's a scan, not an actual list of /proc
         // Concatenates pid with path
         int n = snprintf(path, sizeof(path), "/proc/%zu/status", pid);
-        if (n < 0 || (size_t)n >= sizeof(path)) printf("Errore snprintf\n");
+        if (n < 0 || (size_t)n >= sizeof(path)) perror("Error: failed snprintf\n");
         
         FILE *fp = fopen(path, "r"); // Opens /proc/<pid>/status
         if (fp){
@@ -51,7 +52,6 @@ proc_v_t* retrieve_processes(void){
             // If the retrieval operation was successful, increment the count of stored process information
             if (got_name && got_state && got_pid)
                 if (psv->qty < MAX_PROCS) psv->qty++;
-            
         }
     }
 
@@ -62,7 +62,7 @@ proc_v_t* retrieve_processes(void){
         return psv;
     }
 
-    // Reallocatea the array to the exact size; if realloc fails, keeps the original pointer
+    // Reallocates the array to the exact size; if realloc fails, keeps the original pointer
     proc_t *resized = realloc(psv->ps, psv->qty * sizeof(*psv->ps));
     if (resized == NULL) return psv;
     psv->ps = resized;
@@ -90,7 +90,7 @@ void free_processes(proc_v_t *psv) {
 
 // Retrieves, prints and frees stored processes vector and information
 void get_proc(void){
-    proc_v_t * procs_vector = retrieve_processes();
+    proc_v_t *procs_vector = retrieve_processes();
     print_processes(procs_vector);
     free_processes(procs_vector);
 }

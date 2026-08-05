@@ -1,48 +1,49 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "../include/sysmonitor.h"
+
+#include "sysmonitor.h"
 
 // Retrives received and transimetted bytes
-void retrieve_netstat(net_v_t *retrieved_v){
+void retrieve_netstat(net_v_t *retrieved){
     FILE *fp = fopen("/proc/net/dev", "r");
     if (fp == NULL){
-        perror("Error: failed to open /proc/net/dev");
+        perror("retrieve_netstat: failed to open /proc/net/dev");
         exit(EXIT_FAILURE);
     }
 
     char line[512];
-    // Skips header and first line
+    // Skip header lines (first line + the second header line)
     for (size_t skip = 1; skip <= 2; skip++){
         if (!fgets(line, sizeof(line), fp)) {
-            perror("fgets failed");
+            perror("retrieve_netstat: fgets failed");
             fclose(fp);
-            return;
+            exit(EXIT_FAILURE);
         }
     }
 
     // Parses the file and populates the array with each interface name, received bytes, and transmitted bytes
     int parsed = 0;
     while ( fgets(line, sizeof(line), fp) != NULL ) {
-        if (retrieved_v->count >= MAX_IFACES) break; // Handle interface overflow beyond MAX_IFACES
+        if (retrieved->count >= MAX_IFACES) break; // Handle interface overflow beyond MAX_IFACES
         parsed = sscanf(line, "%63[^:]: %llu %*s %*s %*s %*s %*s %*s %*s %llu %*s %*s %*s %*s %*s %*s %*s",
-            retrieved_v->vector[retrieved_v->count].iface,
-            &retrieved_v->vector[retrieved_v->count].rx_bytes,
-            &retrieved_v->vector[retrieved_v->count].tx_bytes
+            retrieved->vector[retrieved->count].iface,
+            &retrieved->vector[retrieved->count].rx_bytes,
+            &retrieved->vector[retrieved->count].tx_bytes
         );
-        if ( parsed == 3 ) retrieved_v->count++;
+        if ( parsed == 3 ) retrieved->count++;
     }
     
     // Checks potential causes of read failure
     if (ferror(fp)) {
-        perror("fgets");
+        perror("retrieve_netstat: fgets/read error");
         fclose(fp);
         return;
     }
 
 	// Closes the file and handles errors, if they occur
     if (fclose(fp) != 0) {
-        perror("fclose");
+        perror("retrieve_netstat: fclose failed");
         return;
     }
 }
@@ -60,13 +61,14 @@ void print_net_vector(net_v_t *n){
 net_v_t* net_sample(void){
     net_t* array = (net_t*) malloc(sizeof(net_t)*MAX_IFACES);
     if (array == NULL){
-        perror("Error: failed to allocate memory");
+        perror("net_sample: malloc failed");
         exit(EXIT_FAILURE);
     }
 
-    net_v_t* net_container = (net_v_t*) malloc(sizeof(net_v_t));
+    net_v_t *net_container = malloc(sizeof(net_v_t));
     if (net_container == NULL){
-        perror("Error: failed to allocate memory");
+        perror("net_sample: malloc net_v_t failed");
+        free(array);
         exit(EXIT_FAILURE);
     }
     net_container->count = 0; // Inizializes the count of stored interface information
@@ -76,9 +78,12 @@ net_v_t* net_sample(void){
     retrieve_netstat(net_container);
     
     // Reallocates the array to the exact size; if realloc fails, keeps the original pointer
-    net_t *v = realloc(array, net_container->count * sizeof(net_t));
-    if (v != NULL) net_container->vector = v;
-    else net_container->vector = array;
+    // If count is 0, just keep the original array
+    if (net_container->count > 0) {
+        net_t *v = realloc(array, net_container->count * sizeof(net_t));
+        if (v != NULL) net_container->vector = v;
+        else net_container->vector = array;
+    }
 
     return net_container;
 }
@@ -136,11 +141,10 @@ void print_net_bytes(computed_net_bytes_t* bytes){
 }
 
 // Deallocates the dynamically allocated memory
-void free_net(net_v_t* s1, net_v_t* s2){
+void free_net(net_v_t* s1){
+    if (!s1) return;
     free(s1->vector);
-    free(s2->vector);
     free(s1);
-    free(s2);
 }
 
 // Retrieves and prints network used bandwidth
@@ -158,5 +162,5 @@ void get_used_bandwidth(void){
     computed_net_bytes_t *bytes = compute_used_bandwidth(net_sample1, net_sample2);
     print_net_bytes(bytes);
 
-    free_net(net_sample1, net_sample2);
+    free_net(net_sample1);
 }

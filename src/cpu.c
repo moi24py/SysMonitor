@@ -3,7 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 #include <unistd.h>
-#include "../include/sysmonitor.h"
+
+#include "sysmonitor.h"
 
 // Retrieves CPU measurement data
 int parse_stats(cpu_stat_t *cpu_stat){
@@ -79,7 +80,7 @@ cpu_stat_tot_idle_t* sum_total(cpu_stat_t *cpu_stats){
     return sums;
 }
 
-// Computes total CPU utilization (all cores)
+// Computes total CPU utilization (all cores) expressed in percentage
 double total_CPU_time(cpu_stat_tot_idle_t* sum1, cpu_stat_tot_idle_t* sum2){
     double idles = (double)sum1->idle - (double)sum2->idle;
     double totals = (double)sum1->total - (double)sum2->total;

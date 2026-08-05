@@ -3,7 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 #include <unistd.h>
-#include "../include/sysmonitor.h"
+
+#include "sysmonitor.h"
 
 // Retrieves memory statistics
 int parse_mem(mem_stat_t *mem){

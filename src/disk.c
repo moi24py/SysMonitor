@@ -3,9 +3,12 @@
 #include <string.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <stdint.h>
 #include <sys/statvfs.h>
 #include <sys/types.h>
-#include "../include/sysmonitor.h"
+#include <limits.h>
+
+#include "sysmonitor.h"
 
 
 // Array that lists pseudo-filesystem types
@@ -50,7 +53,7 @@ bool want_overlay(void) {
 
 
 // Retrieves mounted filesystems (pseudo-fs excluded)
-disk_t* retrieve_fs(void){
+disks_container* retrieve_fs(void){
     FILE *fp = fopen("/proc/mounts", "r");
     if (fp == NULL){
         perror("Error: failed to open /proc/mounts");
@@ -58,16 +61,24 @@ disk_t* retrieve_fs(void){
     }
 
     // Struct that stores filesystems name and mount point 
-    disk_t* fsys = (disk_t*) malloc(sizeof(disk_t)*MAX_FS);
+    disk_t* fsys = calloc(MAX_FS, sizeof(disk_t));
+
+    if (fsys == NULL){
+        perror("Error: failed to allocate dinamic memory");
+        exit(EXIT_FAILURE);
+    }
     char line[1024];
     int fsys_qty = 0;
+    disk_t* base = fsys;
     // Retrieve filesystems type and mount point
-    while( fgets(line, sizeof(line), fp) != NULL ){
+    while( fgets(line, sizeof(line), fp) != NULL && fsys_qty < MAX_FS){
         // Filters out mounts with virtual filesystem fstype (e.g., procfs/sysfs/tmpfs)
         // so the disk report focuses on real storage. Optionally includes virtual filesystems
-        sscanf(line, "%*s %s %s", (fsys+fsys_qty)->mount, (fsys+fsys_qty)->fstype);
-        if (is_pseudo_fstype((fsys+fsys_qty)->fstype)) (fsys+fsys_qty)->pseudo = true;
-        else (fsys+fsys_qty)->pseudo = false;
+        int n = sscanf(line, "%*s %s %s",
+            (base+fsys_qty)->mount,
+            (base+fsys_qty)->fstype);
+        if (n != 2) continue;
+        (base+fsys_qty)->pseudo = is_pseudo_fstype((base+fsys_qty)->fstype);
         fsys_qty++;
     }
 
@@ -80,22 +91,27 @@ disk_t* retrieve_fs(void){
         perror("Error: failed to close /proc/mounts");
         exit(EXIT_FAILURE);
     }
-    printf("There are %d mounted filesystems\n", fsys_qty);
+    
+    disks_container *disks = (disks_container*) malloc(sizeof(disks_container));
+    if (disks == NULL){
+        perror("Error: failed to allocate dinamic memory");
+        exit(EXIT_FAILURE);
+    }
+    disks->v = fsys;
+    disks->size = fsys_qty;
 
-    return fsys;
+    return disks;
 }
 
 
 // Checks if the filesystem type is virtual
-bool is_pseudo_fstype(char *fsname){
-    size_t i;
-    for(i=0; i<size_ignored_fstype; i++){
-        if ( strncmp(fsname, pseudo_fstype[i], strlen(fsname)) == 0 ){
-            return true;
-        }
+bool is_pseudo_fstype(const char *fsname){
+    for(size_t i = 0; i < size_ignored_fstype; i++){
+        if (strcmp(fsname, pseudo_fstype[i]) == 0) return true;
     }
     return false;
 }
+
 
 
 // Computes a filesystem total, free and used space
@@ -107,25 +123,21 @@ void compute_fs_space(disk_t *fs, struct statvfs *stats){
 
 
 // Converts bytes to human readable bytes and prints the result
-char* human_readable(const unsigned long long bytes){
-    const char *units[] = {"B", "KiB", "MiB", "GiB", "TiB", "PiB"};
-    double human_read = (double)bytes;
-    int i=0;
-    int max_i = (int)(sizeof(units)/sizeof(units[0]))-1;
+void human_readable(unsigned long long bytes, char* out, size_t out_sz) {
+    const char* units[] = {"B", "KiB", "MiB", "GiB", "TiB", "PiB"};
+    double human = (double)bytes;
 
-    while(human_read >= 1024.0 && i < max_i){
-        human_read /= 1024.0;
+    int i = 0;
+    int max_i = (int)(sizeof(units)/sizeof(units[0])) - 1;
+
+    while (human >= 1024.0 && i < max_i) {
+        human /= 1024.0;
         i++;
     }
-    size_t human_bytes_s = 50;
-    char *human_bytes = (char*) malloc(sizeof(char)*human_bytes_s);
 
-    if (i==0) snprintf(human_bytes, human_bytes_s, "%llu %s", bytes, units[i]);
-    else snprintf(human_bytes, human_bytes_s, "%.1f %s", human_read, units[i]);
-    
-    return human_bytes;
+    if (i == 0) snprintf(out, out_sz, "%llu %s", bytes, units[i]);
+    else        snprintf(out, out_sz, "%.1f %s", human, units[i]);
 }
-
 
 // Prints a filesystem total space, free space, used space
 void print_fs_space(disk_t *fs, struct statvfs *stats, size_t i){
@@ -133,48 +145,113 @@ void print_fs_space(disk_t *fs, struct statvfs *stats, size_t i){
         printf("%3ld | %-30s | %-5s | %-60s | %-10s | %-10s | %-10s\n", i+1, "N/A", "N/A", (fs)->mount, "N/A", "N/A", "N/A");
     else{
         compute_fs_space(fs+i, stats);
-        char* t = human_readable((fs)->total_space);
-        char *f = human_readable((fs)->free_space);
-        char *u = human_readable((fs)->used_space);
+        char buf1[32];
+        char buf2[32];
+        char buf3[32];
+        human_readable((fs)->total_space, buf1, sizeof(buf1));
+        human_readable((fs)->free_space, buf2, sizeof(buf2));
+        human_readable((fs)->used_space, buf3, sizeof(buf3));
         printf("%3ld | %-30s | %-5s | %-60s | %-10s | %-10s | %-10s\n",
             i+1,
             (fs)->fstype,
             (fs)->pseudo ? "yes" : "no",
             (fs)->mount,
-            t,f,u);
-        free(t);
-        free(f);
-        free(u);
+            buf1, buf2, buf3);
     }              
 }
 
 
 // Prints an array of disk_t struct that stores filesystem data
-void print_fs_stats(disk_t *fs, int overlay){
+void print_fs_stats(disks_container *fs, int overlay){
     struct statvfs stats;
     printf("\n%3s | %-30s | %-5s | %-60s | %-10s | %-10s | %-10s\n", "#", "FSTYPE", "PSEUDO", "MOUNT POINT", "TOTAL", "FREE", "USED");
     printf("%3s---%30s---%5s--%40s---%10s---%10s---%10s\n",
         "---", "------------------------------", "----------",
         "------------------------------------------------------------", "----------", "----------", "----------");
-    for(size_t i=0; i<MAX_FS; i++){
-        char s = (fs+i)->fstype[0];
+    for(size_t i=0; i < fs->size; i++){
+        char s = ((fs->v)+i)->fstype[0];
         if (s != '\0' &&  isalpha(s)){
             // Shows non-pseudo filesystems only
-            if (overlay == 0 && (fs+i)->pseudo == false){
-                print_fs_space(fs+i, &stats, i);
+            if (overlay == 0 && ((fs->v)+i)->pseudo == false){
+                print_fs_space((fs->v)+i, &stats, i);
             } // Shows all filesystems
             else if (overlay == 1){
-                print_fs_space(fs+i, &stats, i);
+                print_fs_space((fs->v)+i, &stats, i);
             }
         }
     }
 }
 
+// Avoids overflow in 64 bits expressions
+static inline unsigned long long u64(unsigned long n) {
+    return (unsigned long long)n;
+}
 
-// Retrieves and prints disk stats
-void get_disk_stats(void){
-    disk_t *fsys = retrieve_fs();
-    bool overlay = want_overlay();
-    print_fs_stats(fsys, overlay);
-    free(fsys);
+// Iterates every mountpoint in fsv and filters out pseudo-filesystems, fstype that not corresponds to target_fstype, fs failed by statvfs
+// Picks the filesystem with the greatest capacity (total)
+// Returns: index of the "best" mount, or -1 if not found
+int pick_best_mount_by_fstype(const disks_container *fsv, const char *target_fstype) {
+    int best = -1;
+    unsigned long long best_total = 0; // current best filesystem with max capacity
+
+    for (size_t i = 0; i < fsv->size; i++) {
+        if (fsv->v[i].pseudo) continue; // skips pseudo filesystems
+
+        const char *fsname = fsv->v[i].fstype;
+
+        // matching filesystem type
+        bool match = false;
+        if (strcmp(target_fstype, "fuse.vr") == 0) { // if target is "fuse.vr" every fsname that starts with "fuse." is valid
+            match = (strncmp(fsname, "fuse.", 5) == 0); // fuse.* => fuse.vr
+        } else {
+            match = (strcmp(fsname, target_fstype) == 0); // otherwise exact match
+        }
+
+        if (!match) continue;
+
+        // Reads capacity
+        struct statvfs st;
+        if (statvfs(fsv->v[i].mount, &st) != 0) continue;
+
+        // Chooses block size
+        unsigned long long frsize = (unsigned long long)st.f_frsize; // fragment size
+        if (frsize == 0) frsize = (unsigned long long)st.f_bsize;
+
+        // Computes total: blocks quanity * fragment size
+        unsigned long long total = (unsigned long long)st.f_blocks * frsize;
+
+        // Picks best mount
+        if (best == -1 || total > best_total) {
+            best = (int)i;
+            best_total = total;
+        }
+    }
+    return best;
+}
+
+// Chooses the best mounts thanks to pick_best_mount_by_fstype() and computes total space, free space and used space
+disk_choice compute_choice_for_fstype(const disks_container *fsv, const char *target_fstype) {
+    disk_choice out;
+    out.space = (disk_space){0,0,0};
+    out.mount_point = NULL;
+
+    int idx = pick_best_mount_by_fstype(fsv, target_fstype);
+    if (idx < 0) return out;
+
+    out.mount_point = fsv->v[idx].mount;
+
+    struct statvfs st;
+    if (statvfs(fsv->v[idx].mount, &st) != 0) return out;
+
+    unsigned long long frsize = (unsigned long long)st.f_frsize;
+    if (frsize == 0) frsize = (unsigned long long)st.f_bsize;
+
+    unsigned long long total = (unsigned long long)st.f_blocks * frsize;
+    unsigned long long free  = (unsigned long long)st.f_bavail * frsize;
+    unsigned long long used  = (total >= free) ? (total - free) : 0;
+
+    out.space.total = total;
+    out.space.free  = free;
+    out.space.used  = used;
+    return out;
 }
