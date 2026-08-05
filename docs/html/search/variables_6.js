@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['total_0',['total',['../structcpu__stat__tot__idle__t.html#ac3db248c35e11a75b4e99f0087d77c90',1,'cpu_stat_tot_idle_t']]],
-  ['total_5fspace_1',['total_space',['../structdisk__t.html#a0d53694a025281f8c131f1c43875a42b',1,'disk_t']]]
+  ['pid_0',['pid',['../structproc__t.html#ae0d46a978d5cd6707411f276ad869b9c',1,'proc_t']]],
+  ['ps_1',['ps',['../structproc__v__t.html#afb7270c66f1c96efd0fc1a291d9c5f49',1,'proc_v_t']]],
+  ['pseudo_2',['pseudo',['../structdisk__t.html#a8852f1b8ca639dd36766d69b69fb920b',1,'disk_t']]]
 ];

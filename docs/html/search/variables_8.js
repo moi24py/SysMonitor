@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['v_0',['v',['../structdisks__container.html#a717c3d539937505071d9b2a4ea4b60c0',1,'disks_container']]],
-  ['vector_1',['vector',['../structnet__v__t.html#aac44dfc3ee700f007e26176d50db4584',1,'net_v_t']]]
+  ['received_5fper_5fsec_0',['received_per_sec',['../structcomputed__net__bytes__t.html#ab835000984be54805a98c605945d5164',1,'computed_net_bytes_t']]],
+  ['rx_5fbytes_1',['rx_bytes',['../structnet__t.html#a5bf9b58c104bf0ac320e8cbdc59227f4',1,'net_t']]]
 ];

@@ -119,28 +119,33 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('display_8h_sou
   <div class="headertitle"><div class="title">display.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef _DISPLAY_H</span></div>
+<a href="display_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef _DISPLAY_H</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define _DISPLAY_H</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;ncurses.h&gt;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;sysmonitor.h&quot;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;<a class="code" href="sysmonitor_8h.html">sysmonitor.h</a>&quot;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="keyword">typedef</span> <span class="keyword">struct </span>Display Display;</div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno"><a class="line" href="display_8h.html#aa00ba1100a608a255a4233b4924f308a">    7</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_typedef" href="display_8h.html#aa00ba1100a608a255a4233b4924f308a">Display</a> <a class="code hl_typedef" href="display_8h.html#aa00ba1100a608a255a4233b4924f308a">Display</a>;</div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>Display* display_create(<span class="keywordtype">void</span>);</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="display_8h.html#a8d90c64c2a4398e7f5ee4741d0e863a3">   14</a></span><a class="code hl_typedef" href="display_8h.html#aa00ba1100a608a255a4233b4924f308a">Display</a>* <a class="code hl_function" href="display_8h.html#a8d90c64c2a4398e7f5ee4741d0e863a3">display_create</a>(<span class="keywordtype">void</span>);</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keywordtype">void</span> display_update(Display* d);</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="display_8h.html#a655358e5102d5255a131aed40bbf6c71">   22</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="display_8h.html#a655358e5102d5255a131aed40bbf6c71">display_update</a>(<a class="code hl_typedef" href="display_8h.html#aa00ba1100a608a255a4233b4924f308a">Display</a>* d);</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="keywordtype">void</span> display_destroy(Display* d);</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="display_8h.html#ad7d91b8cb0927b540cc18b9935c4b887">   28</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="display_8h.html#ad7d91b8cb0927b540cc18b9935c4b887">display_destroy</a>(<a class="code hl_typedef" href="display_8h.html#aa00ba1100a608a255a4233b4924f308a">Display</a>* d);</div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="adisplay_8h_html_a655358e5102d5255a131aed40bbf6c71"><div class="ttname"><a href="display_8h.html#a655358e5102d5255a131aed40bbf6c71">display_update</a></div><div class="ttdeci">void display_update(Display *d)</div><div class="ttdoc">Render a UI update tick and handle user input.</div></div>
+<div class="ttc" id="adisplay_8h_html_a8d90c64c2a4398e7f5ee4741d0e863a3"><div class="ttname"><a href="display_8h.html#a8d90c64c2a4398e7f5ee4741d0e863a3">display_create</a></div><div class="ttdeci">Display * display_create(void)</div><div class="ttdoc">Initialize ncurses and create UI windows.</div></div>
+<div class="ttc" id="adisplay_8h_html_aa00ba1100a608a255a4233b4924f308a"><div class="ttname"><a href="display_8h.html#aa00ba1100a608a255a4233b4924f308a">Display</a></div><div class="ttdeci">struct Display Display</div><div class="ttdef"><b>Definition</b> display.h:7</div></div>
+<div class="ttc" id="adisplay_8h_html_ad7d91b8cb0927b540cc18b9935c4b887"><div class="ttname"><a href="display_8h.html#ad7d91b8cb0927b540cc18b9935c4b887">display_destroy</a></div><div class="ttdeci">void display_destroy(Display *d)</div><div class="ttdoc">Destroy the UI and restore the terminal state.</div></div>
+<div class="ttc" id="asysmonitor_8h_html"><div class="ttname"><a href="sysmonitor_8h.html">sysmonitor.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>display.h</b></li>
+    <li class="navelem"><a href="display_8h.html">display.h</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
   </ul>
 </div>

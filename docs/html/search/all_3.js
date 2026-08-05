@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['idle_0',['idle',['../structcpu__stat__tot__idle__t.html#a33e435ed79bd42a3e152e820d2fe9c59',1,'cpu_stat_tot_idle_t']]]
+  ['guest_0',['guest',['../structcpu__stat__t.html#a22f4112e2c46b20336ccbd1eaffad03f',1,'cpu_stat_t']]],
+  ['guest_5fnice_1',['guest_nice',['../structcpu__stat__t.html#a1d32be94f22c1a22f63b2c4fec76f7fe',1,'cpu_stat_t']]]
 ];
