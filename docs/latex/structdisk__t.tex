@@ -1,0 +1,77 @@
+\doxysection{disk\+\_\+t Struct Reference}
+\hypertarget{structdisk__t}{}\label{structdisk__t}\index{disk\_t@{disk\_t}}
+
+
+Filesystem entry (mount + accounting).  
+
+
+
+
+{\ttfamily \+\#include $<$sysmonitor.\+h$>$}
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+char \doxymbox{\hyperlink{structdisk__t_adc8009233c595499820b92a7e7d9abfd}{mount}} \+[512]\+
+\item 
+char \doxymbox{\hyperlink{structdisk__t_a24864a5dfcc5ccacf6468dc34e930254}{fstype}} \+[100]\+
+\item 
+bool \doxymbox{\hyperlink{structdisk__t_a8852f1b8ca639dd36766d69b69fb920b}{pseudo}}
+\item 
+unsigned long long \doxymbox{\hyperlink{structdisk__t_a0d53694a025281f8c131f1c43875a42b}{total\+\_\+space}}
+\item 
+unsigned long long \doxymbox{\hyperlink{structdisk__t_a7f0aaf5293af0032e8e49078a42953e2}{free\+\_\+space}}
+\item 
+unsigned long long \doxymbox{\hyperlink{structdisk__t_a6b9dc8a3c7f261192aa2175607c66eb3}{used\+\_\+space}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Filesystem entry (mount + accounting). 
+
+Values correspond to fields tipically found in /\+proc/\+mounts. 
+
+\label{structdisk__t_doc-variable-members}
+\Hypertarget{structdisk__t_doc-variable-members}
+\doxysubsection{Field Documentation}
+\Hypertarget{structdisk__t_a7f0aaf5293af0032e8e49078a42953e2}\index{disk\_t@{disk\_t}!free\_space@{free\_space}}
+\index{free\_space@{free\_space}!disk\_t@{disk\_t}}
+\doxysubsubsection{\texorpdfstring{free\_space}{free\_space}}
+{\footnotesize\ttfamily \label{structdisk__t_a7f0aaf5293af0032e8e49078a42953e2} 
+unsigned long long free\+\_\+space}
+
+Free space in bytes \Hypertarget{structdisk__t_a24864a5dfcc5ccacf6468dc34e930254}\index{disk\_t@{disk\_t}!fstype@{fstype}}
+\index{fstype@{fstype}!disk\_t@{disk\_t}}
+\doxysubsubsection{\texorpdfstring{fstype}{fstype}}
+{\footnotesize\ttfamily \label{structdisk__t_a24864a5dfcc5ccacf6468dc34e930254} 
+char fstype\+[100]\+}
+
+Filesystem type (e.\+g., ext4, fuse.\+sshfs, ... \Hypertarget{structdisk__t_adc8009233c595499820b92a7e7d9abfd}\index{disk\_t@{disk\_t}!mount@{mount}}
+\index{mount@{mount}!disk\_t@{disk\_t}}
+\doxysubsubsection{\texorpdfstring{mount}{mount}}
+{\footnotesize\ttfamily \label{structdisk__t_adc8009233c595499820b92a7e7d9abfd} 
+char mount\+[512]\+}
+
+Mount point path \Hypertarget{structdisk__t_a8852f1b8ca639dd36766d69b69fb920b}\index{disk\_t@{disk\_t}!pseudo@{pseudo}}
+\index{pseudo@{pseudo}!disk\_t@{disk\_t}}
+\doxysubsubsection{\texorpdfstring{pseudo}{pseudo}}
+{\footnotesize\ttfamily \label{structdisk__t_a8852f1b8ca639dd36766d69b69fb920b} 
+bool pseudo}
+
+True if this is a pseudo filesystem \Hypertarget{structdisk__t_a0d53694a025281f8c131f1c43875a42b}\index{disk\_t@{disk\_t}!total\_space@{total\_space}}
+\index{total\_space@{total\_space}!disk\_t@{disk\_t}}
+\doxysubsubsection{\texorpdfstring{total\_space}{total\_space}}
+{\footnotesize\ttfamily \label{structdisk__t_a0d53694a025281f8c131f1c43875a42b} 
+unsigned long long total\+\_\+space}
+
+Total space in bytes \Hypertarget{structdisk__t_a6b9dc8a3c7f261192aa2175607c66eb3}\index{disk\_t@{disk\_t}!used\_space@{used\_space}}
+\index{used\_space@{used\_space}!disk\_t@{disk\_t}}
+\doxysubsubsection{\texorpdfstring{used\_space}{used\_space}}
+{\footnotesize\ttfamily \label{structdisk__t_a6b9dc8a3c7f261192aa2175607c66eb3} 
+unsigned long long used\+\_\+space}
+
+Used space in bytes 
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+sysmonitor.\+h\end{DoxyCompactItemize}
