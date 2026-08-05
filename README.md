@@ -1,6 +1,17 @@
 # System Monitoring Tool
 
-# Overview
+## Table of Contents
+- [Overview](#overview)
+- [Screenshot](#screenshot)
+- [Requirements](#requirements)
+- [Documentation](#documentation)
+- [Build](#build)
+- [Run](#run)
+- [How it works](#how-it-works)
+- [Project structure](#project-structure)
+- [References](#references)
+
+## Overview
 Real-time system monitoring tool for GNU/Linux.
 
 It displays:
@@ -12,23 +23,23 @@ It displays:
 
 ## Screenshot
 ![System monitor output](docs/images/output.png)
-gi
-# Requirements
+
+## Requirements
 - Ubuntu 24.10 (tested)
 - Uses `ncurses` for terminal rendering.
 
-# Documentation
+## Documentation
 Doxygen: https://moi24py.github.io/SysMonitor/
 
-# Build
+## Build
 `make` to compile the project
 `make clean` to regenerate `/build`
 
-# Run
+## Run
 - To run the project: `./build/main`
 - To exit: press Ctrl + C (`SIGINT`)
 
-# How it works
+## How it works
 `tools/main.c` runs a loops that calls `display_update(d)` and waits ~50ms with `napms`, while `display_update()` handles the input and metrics polling.
 The program periodically:
 1. Reads system data from:
@@ -40,7 +51,7 @@ The program periodically:
 2. Computes derived metrics (percentages, deltas for bandwidth).
 3. Renders the results using ncurses windows in the terminal.
 
-# Project Structure
+## Project structure
 ```shell
 sysmonitor/
 ├── src/
@@ -60,8 +71,7 @@ sysmonitor/
 └── README.md           # Project information and instructions
 ```
 
-
-# References
+## References
 - [C reference](https://en.cppreference.com/c)
 
 - [ncurses tutorial](https://github.com/mcdaniel/curses_tutorial) by professor Patrick McDaniel
