@@ -12,10 +12,13 @@ It displays:
 
 ## Screenshot
 ![System monitor output](docs/images/output.png)
-
+gi
 # Requirements
 - Ubuntu 24.10 (tested)
 - Uses `ncurses` for terminal rendering.
+
+# Documentation
+Doxygen: https://moi24py.github.io/SysMonitor/
 
 # Build
 `make` to compile the project
@@ -55,8 +58,8 @@ sysmonitor/
 ├── build/              # Object files and executable
 ├── Makefile            # Automatic compilation
 └── README.md           # Project information and instructions
-
 ```
+
 
 # References
 - [C reference](https://en.cppreference.com/c)
