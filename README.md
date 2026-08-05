@@ -1,5 +1,7 @@
 # System Monitoring Tool
 
+---
+
 ## Table of Contents
 - [Overview](#overview)
 - [Screenshot](#screenshot)
@@ -11,6 +13,8 @@
 - [Project structure](#project-structure)
 - [References](#references)
 
+---
+
 ## Overview
 Real-time system monitoring tool for GNU/Linux.
 
@@ -21,15 +25,23 @@ It displays:
 - Active processes (PID, name, state)
 - Network bandwidth (used bandwidth)
 
+---
+
 ## Screenshot
 ![System monitor output](docs/images/output.png)
+
+---
 
 ## Requirements
 - Ubuntu 24.10 (tested)
 - Uses `ncurses` for terminal rendering.
 
+---
+
 ## Documentation
 Doxygen: https://moi24py.github.io/SysMonitor/
+
+---
 
 ## Build
 To compile the project:
@@ -42,12 +54,17 @@ To regenerate `/build`
 make clean
 ```
 
+---
+
 ## Run
 - To run the project: `./build/main`
 - To exit: press Ctrl + C (`SIGINT`)
 
+---
+
 ## How it works
-`tools/main.c` runs a loops that calls `display_update(d)` and waits ~50ms with `napms`, while `display_update()` handles the input and metrics polling.
+`tools/main.c` runs a loops that calls `display_update(d)` and waits ~50 ms, using `napms`, while `display_update()` handles input and metrics polling.
+
 The program periodically:
 1. Reads system data from:
    - `/proc/stat` (CPU utilization)
@@ -57,6 +74,8 @@ The program periodically:
    - `/proc/[PID]/status` (process details: state/name/etc.)
 2. Computes derived metrics (percentages, deltas for bandwidth).
 3. Renders the results using ncurses windows in the terminal.
+
+---
 
 ## Project structure
 ```shell
@@ -77,6 +96,8 @@ sysmonitor/
 ├── Makefile            # Automatic compilation
 └── README.md           # Project information and instructions
 ```
+
+---
 
 ## References
 - [C reference](https://en.cppreference.com/c)
