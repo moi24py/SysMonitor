@@ -32,8 +32,15 @@ It displays:
 Doxygen: https://moi24py.github.io/SysMonitor/
 
 ## Build
-`make` to compile the project
-`make clean` to regenerate `/build`
+To compile the project:
+```sh
+make
+``` 
+
+To regenerate `/build`
+```sh
+make clean
+```
 
 ## Run
 - To run the project: `./build/main`
