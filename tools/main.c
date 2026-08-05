@@ -2,28 +2,36 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdbool.h>
-#include "../include/sysmonitor.h"
+#include <signal.h>
+#include <ncurses.h>
 
-int main(void){
+#include "sysmonitor.h"
+#include "display.h"
 
-    int rep = 3;
-    while(rep--){
-        get_proc();
-        printf("\n");
-    
-        get_disk_stats(false);
-        printf("\n");
-    
-        get_CPU_usage();
-        printf("\n");
+static volatile bool running = true;
 
-        get_memory_usage();
-        printf("\n");
-        
-        get_used_bandwidth();
-        printf("\n");
+static void handle_signal(int sig) {
+    (void)sig;
+    running = false;
+}
 
-        if (rep > 1) sleep(3);
+int main(void) {
+    signal(SIGINT, handle_signal);
+
+    Display *d = display_create();
+    if (!d) {
+        fprintf(stderr, "Errore: impossibile inizializzare il display\n");
+        return EXIT_FAILURE;
     }
+
+    while (running) {
+        // Un solo refresh “frequente”
+        display_update(d);
+
+        // Piccola pausa per non consumare CPU
+        napms(50); // ~20 FPS, scroll molto reattivo
+    }
+
+    display_destroy(d);
     return EXIT_SUCCESS;
 }
