@@ -1,0 +1,86 @@
+\doxysection{display.\+h File Reference}
+\hypertarget{display_8h}{}\label{display_8h}\index{display.h@{display.h}}
+{\ttfamily \+\#include $<$ncurses.\+h$>$}\newline
+{\ttfamily \+\#include "{}sysmonitor.\+h"{}}\newline
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \doxymbox{\hyperlink{display_8h_aa00ba1100a608a255a4233b4924f308a}{Display}} \doxymbox{\hyperlink{display_8h_aa00ba1100a608a255a4233b4924f308a}{Display}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{display_8h_aa00ba1100a608a255a4233b4924f308a}{Display}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{display_8h_a8d90c64c2a4398e7f5ee4741d0e863a3}{display\+\_\+create}} (void)
+\begin{DoxyCompactList}\small\item\em Initialize ncurses and create UI windows. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{display_8h_a655358e5102d5255a131aed40bbf6c71}{display\+\_\+update}} (\doxymbox{\hyperlink{display_8h_aa00ba1100a608a255a4233b4924f308a}{Display}} \texorpdfstring{$\ast$}{*}d)
+\begin{DoxyCompactList}\small\item\em Render a UI update tick and handle user input. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{display_8h_ad7d91b8cb0927b540cc18b9935c4b887}{display\+\_\+destroy}} (\doxymbox{\hyperlink{display_8h_aa00ba1100a608a255a4233b4924f308a}{Display}} \texorpdfstring{$\ast$}{*}d)
+\begin{DoxyCompactList}\small\item\em Destroy the UI and restore the terminal state. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{display_8h_doc-typedef-members}
+\Hypertarget{display_8h_doc-typedef-members}
+\doxysubsection{Typedef Documentation}
+\Hypertarget{display_8h_aa00ba1100a608a255a4233b4924f308a}\index{display.h@{display.h}!Display@{Display}}
+\index{Display@{Display}!display.h@{display.h}}
+\doxysubsubsection{\texorpdfstring{Display}{Display}}
+{\footnotesize\ttfamily \label{display_8h_aa00ba1100a608a255a4233b4924f308a} 
+typedef struct \doxymbox{\hyperlink{display_8h_aa00ba1100a608a255a4233b4924f308a}{Display}} \doxymbox{\hyperlink{display_8h_aa00ba1100a608a255a4233b4924f308a}{Display}}}
+
+
+
+\label{display_8h_doc-func-members}
+\Hypertarget{display_8h_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{display_8h_a8d90c64c2a4398e7f5ee4741d0e863a3}\index{display.h@{display.h}!display\_create@{display\_create}}
+\index{display\_create@{display\_create}!display.h@{display.h}}
+\doxysubsubsection{\texorpdfstring{display\_create()}{display\_create()}}
+{\footnotesize\ttfamily \label{display_8h_a8d90c64c2a4398e7f5ee4741d0e863a3} 
+\doxymbox{\hyperlink{display_8h_aa00ba1100a608a255a4233b4924f308a}{Display}} \texorpdfstring{$\ast$}{*} display\+\_\+create (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Initialize ncurses and create UI windows. 
+
+\begin{DoxyReturn}{Returns}
+Pointer to a \doxylink{display_8h_aa00ba1100a608a255a4233b4924f308a}{Display} instance, or NULL on failure. 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+display\+\_\+update must be called repeatedly in the main loop. 
+\end{DoxyNote}
+\Hypertarget{display_8h_ad7d91b8cb0927b540cc18b9935c4b887}\index{display.h@{display.h}!display\_destroy@{display\_destroy}}
+\index{display\_destroy@{display\_destroy}!display.h@{display.h}}
+\doxysubsubsection{\texorpdfstring{display\_destroy()}{display\_destroy()}}
+{\footnotesize\ttfamily \label{display_8h_ad7d91b8cb0927b540cc18b9935c4b887} 
+void display\+\_\+destroy (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{display_8h_aa00ba1100a608a255a4233b4924f308a}{Display}} \texorpdfstring{$\ast$}{*}}]{d}{}\end{DoxyParamCaption})}
+
+
+
+Destroy the UI and restore the terminal state. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em d} & \doxylink{display_8h_aa00ba1100a608a255a4233b4924f308a}{Display} instance to destroy. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{display_8h_a655358e5102d5255a131aed40bbf6c71}\index{display.h@{display.h}!display\_update@{display\_update}}
+\index{display\_update@{display\_update}!display.h@{display.h}}
+\doxysubsubsection{\texorpdfstring{display\_update()}{display\_update()}}
+{\footnotesize\ttfamily \label{display_8h_a655358e5102d5255a131aed40bbf6c71} 
+void display\+\_\+update (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{display_8h_aa00ba1100a608a255a4233b4924f308a}{Display}} \texorpdfstring{$\ast$}{*}}]{d}{}\end{DoxyParamCaption})}
+
+
+
+Render a UI update tick and handle user input. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em d} & \doxylink{display_8h_aa00ba1100a608a255a4233b4924f308a}{Display} instance from \doxylink{display_8h_a8d90c64c2a4398e7f5ee4741d0e863a3}{display\+\_\+create()}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+display\+\_\+update also reads non-\/blocking keyboard input for scrolling. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+This function performs periodic polling internally (e.\+g., CPU/\+network \texorpdfstring{$\sim$}{\string~}2s). 
+\end{DoxyWarning}

@@ -1,0 +1,109 @@
+\doxysection{cpu\+\_\+stat\+\_\+t Struct Reference}
+\hypertarget{structcpu__stat__t}{}\label{structcpu__stat__t}\index{cpu\_stat\_t@{cpu\_stat\_t}}
+
+
+CPU counters parsed from /\+proc/\+stat.  
+
+
+
+
+{\ttfamily \+\#include $<$sysmonitor.\+h$>$}
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+unsigned long long \doxymbox{\hyperlink{structcpu__stat__t_a81f131ff2f08b99fd095ef8db979513e}{user}}
+\item 
+unsigned long long \doxymbox{\hyperlink{structcpu__stat__t_a98c69118e5e8896275ba701db11e2f57}{nice}}
+\item 
+unsigned long long \doxymbox{\hyperlink{structcpu__stat__t_a83d4848281d243958caeedfdc3741689}{system}}
+\item 
+unsigned long long \doxymbox{\hyperlink{structcpu__stat__t_a33e435ed79bd42a3e152e820d2fe9c59}{idle}}
+\item 
+unsigned long long \doxymbox{\hyperlink{structcpu__stat__t_aa38cdfd118158d4a7d4cda552d3ad0b2}{iowait}}
+\item 
+unsigned long long \doxymbox{\hyperlink{structcpu__stat__t_a3f4f8f008b4a2897a93f0423cf2e8d95}{irq}}
+\item 
+unsigned long long \doxymbox{\hyperlink{structcpu__stat__t_a75e0d54bfa068cf29418d8cad63c59ca}{softirq}}
+\item 
+unsigned long long \doxymbox{\hyperlink{structcpu__stat__t_a3dbeb5bceef7b8eb914ca2763cfcce10}{steal}}
+\item 
+unsigned long long \doxymbox{\hyperlink{structcpu__stat__t_a22f4112e2c46b20336ccbd1eaffad03f}{guest}}
+\item 
+unsigned long long \doxymbox{\hyperlink{structcpu__stat__t_a1d32be94f22c1a22f63b2c4fec76f7fe}{guest\+\_\+nice}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+CPU counters parsed from /\+proc/\+stat. 
+
+Values correspond to fields in /\+proc/\+stat (user, nice, system, idle, ...). 
+
+\label{structcpu__stat__t_doc-variable-members}
+\Hypertarget{structcpu__stat__t_doc-variable-members}
+\doxysubsection{Field Documentation}
+\Hypertarget{structcpu__stat__t_a22f4112e2c46b20336ccbd1eaffad03f}\index{cpu\_stat\_t@{cpu\_stat\_t}!guest@{guest}}
+\index{guest@{guest}!cpu\_stat\_t@{cpu\_stat\_t}}
+\doxysubsubsection{\texorpdfstring{guest}{guest}}
+{\footnotesize\ttfamily \label{structcpu__stat__t_a22f4112e2c46b20336ccbd1eaffad03f} 
+unsigned long long guest}
+
+\Hypertarget{structcpu__stat__t_a1d32be94f22c1a22f63b2c4fec76f7fe}\index{cpu\_stat\_t@{cpu\_stat\_t}!guest\_nice@{guest\_nice}}
+\index{guest\_nice@{guest\_nice}!cpu\_stat\_t@{cpu\_stat\_t}}
+\doxysubsubsection{\texorpdfstring{guest\_nice}{guest\_nice}}
+{\footnotesize\ttfamily \label{structcpu__stat__t_a1d32be94f22c1a22f63b2c4fec76f7fe} 
+unsigned long long guest\+\_\+nice}
+
+\Hypertarget{structcpu__stat__t_a33e435ed79bd42a3e152e820d2fe9c59}\index{cpu\_stat\_t@{cpu\_stat\_t}!idle@{idle}}
+\index{idle@{idle}!cpu\_stat\_t@{cpu\_stat\_t}}
+\doxysubsubsection{\texorpdfstring{idle}{idle}}
+{\footnotesize\ttfamily \label{structcpu__stat__t_a33e435ed79bd42a3e152e820d2fe9c59} 
+unsigned long long idle}
+
+\Hypertarget{structcpu__stat__t_aa38cdfd118158d4a7d4cda552d3ad0b2}\index{cpu\_stat\_t@{cpu\_stat\_t}!iowait@{iowait}}
+\index{iowait@{iowait}!cpu\_stat\_t@{cpu\_stat\_t}}
+\doxysubsubsection{\texorpdfstring{iowait}{iowait}}
+{\footnotesize\ttfamily \label{structcpu__stat__t_aa38cdfd118158d4a7d4cda552d3ad0b2} 
+unsigned long long iowait}
+
+\Hypertarget{structcpu__stat__t_a3f4f8f008b4a2897a93f0423cf2e8d95}\index{cpu\_stat\_t@{cpu\_stat\_t}!irq@{irq}}
+\index{irq@{irq}!cpu\_stat\_t@{cpu\_stat\_t}}
+\doxysubsubsection{\texorpdfstring{irq}{irq}}
+{\footnotesize\ttfamily \label{structcpu__stat__t_a3f4f8f008b4a2897a93f0423cf2e8d95} 
+unsigned long long irq}
+
+\Hypertarget{structcpu__stat__t_a98c69118e5e8896275ba701db11e2f57}\index{cpu\_stat\_t@{cpu\_stat\_t}!nice@{nice}}
+\index{nice@{nice}!cpu\_stat\_t@{cpu\_stat\_t}}
+\doxysubsubsection{\texorpdfstring{nice}{nice}}
+{\footnotesize\ttfamily \label{structcpu__stat__t_a98c69118e5e8896275ba701db11e2f57} 
+unsigned long long nice}
+
+\Hypertarget{structcpu__stat__t_a75e0d54bfa068cf29418d8cad63c59ca}\index{cpu\_stat\_t@{cpu\_stat\_t}!softirq@{softirq}}
+\index{softirq@{softirq}!cpu\_stat\_t@{cpu\_stat\_t}}
+\doxysubsubsection{\texorpdfstring{softirq}{softirq}}
+{\footnotesize\ttfamily \label{structcpu__stat__t_a75e0d54bfa068cf29418d8cad63c59ca} 
+unsigned long long softirq}
+
+\Hypertarget{structcpu__stat__t_a3dbeb5bceef7b8eb914ca2763cfcce10}\index{cpu\_stat\_t@{cpu\_stat\_t}!steal@{steal}}
+\index{steal@{steal}!cpu\_stat\_t@{cpu\_stat\_t}}
+\doxysubsubsection{\texorpdfstring{steal}{steal}}
+{\footnotesize\ttfamily \label{structcpu__stat__t_a3dbeb5bceef7b8eb914ca2763cfcce10} 
+unsigned long long steal}
+
+\Hypertarget{structcpu__stat__t_a83d4848281d243958caeedfdc3741689}\index{cpu\_stat\_t@{cpu\_stat\_t}!system@{system}}
+\index{system@{system}!cpu\_stat\_t@{cpu\_stat\_t}}
+\doxysubsubsection{\texorpdfstring{system}{system}}
+{\footnotesize\ttfamily \label{structcpu__stat__t_a83d4848281d243958caeedfdc3741689} 
+unsigned long long system}
+
+\Hypertarget{structcpu__stat__t_a81f131ff2f08b99fd095ef8db979513e}\index{cpu\_stat\_t@{cpu\_stat\_t}!user@{user}}
+\index{user@{user}!cpu\_stat\_t@{cpu\_stat\_t}}
+\doxysubsubsection{\texorpdfstring{user}{user}}
+{\footnotesize\ttfamily \label{structcpu__stat__t_a81f131ff2f08b99fd095ef8db979513e} 
+unsigned long long user}
+
+
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{sysmonitor_8h}{sysmonitor.\+h}}\end{DoxyCompactItemize}

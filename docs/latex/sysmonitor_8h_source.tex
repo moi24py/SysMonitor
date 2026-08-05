@@ -1,0 +1,148 @@
+\doxysection{sysmonitor.\+h}
+\hypertarget{sysmonitor_8h_source}{}\label{sysmonitor_8h_source}\doxymbox{\hyperlink{sysmonitor_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <sys/statvfs.h>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <sys/types.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <stddef.h>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ \_SYSMONITOR\_H}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ \_SYSMONITOR\_H}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ \#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\ CPU\ \#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\ }}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#define\ MAX\_CPUS\ 256}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structcpu__stat__t_a81f131ff2f08b99fd095ef8db979513e}{user}};}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structcpu__stat__t_a98c69118e5e8896275ba701db11e2f57}{nice}};}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structcpu__stat__t_a83d4848281d243958caeedfdc3741689}{system}};}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structcpu__stat__t_a33e435ed79bd42a3e152e820d2fe9c59}{idle}};}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structcpu__stat__t_aa38cdfd118158d4a7d4cda552d3ad0b2}{iowait}};}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structcpu__stat__t_a3f4f8f008b4a2897a93f0423cf2e8d95}{irq}};}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structcpu__stat__t_a75e0d54bfa068cf29418d8cad63c59ca}{softirq}};}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structcpu__stat__t_a3dbeb5bceef7b8eb914ca2763cfcce10}{steal}};}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structcpu__stat__t_a22f4112e2c46b20336ccbd1eaffad03f}{guest}};}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structcpu__stat__t_a1d32be94f22c1a22f63b2c4fec76f7fe}{guest\_nice}};}
+\DoxyCodeLine{00031\ \}\ \doxymbox{\hyperlink{structcpu__stat__t}{cpu\_stat\_t}};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00037\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structcpu__stat__tot__idle__t_ac3db248c35e11a75b4e99f0087d77c90}{total}};\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structcpu__stat__tot__idle__t_a33e435ed79bd42a3e152e820d2fe9c59}{idle}};\ \ }
+\DoxyCodeLine{00040\ \}\ \doxymbox{\hyperlink{structcpu__stat__tot__idle__t}{cpu\_stat\_tot\_idle\_t}};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00048\ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{sysmonitor_8h_a1fc41b88aaa4aa724085d7c282c896bf}{parse\_stats}}(\doxymbox{\hyperlink{structcpu__stat__t}{cpu\_stat\_t}}\ *cpu\_stat);}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00056\ \doxymbox{\hyperlink{structcpu__stat__tot__idle__t}{cpu\_stat\_tot\_idle\_t}}*\ \doxymbox{\hyperlink{sysmonitor_8h_a31702fcf2c3e2487496e3112380754a2}{sum\_total}}(\doxymbox{\hyperlink{structcpu__stat__t}{cpu\_stat\_t}}\ *cpu\_stats);}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00064\ \textcolor{keywordtype}{double}\ \doxymbox{\hyperlink{sysmonitor_8h_aa40861ee627fa0ad12551bd6f324e7e3}{total\_CPU\_time}}(\doxymbox{\hyperlink{structcpu__stat__tot__idle__t}{cpu\_stat\_tot\_idle\_t}}*\ sum1,\ \doxymbox{\hyperlink{structcpu__stat__tot__idle__t}{cpu\_stat\_tot\_idle\_t}}*\ sum2);}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{comment}{//\ \#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\ MEMORY\ \#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\ }}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00076\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structmem__stat__t_a5cf2ecf2194ee1f2589ddd9f32c08edf}{mem\_total}};}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structmem__stat__t_a126e82d0c512169f5143eb64d10fe006}{mem\_free}};}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structmem__stat__t_a0d887ceeae44791525959685af3f56e0}{mem\_available}};}
+\DoxyCodeLine{00080\ \}\ \doxymbox{\hyperlink{structmem__stat__t}{mem\_stat\_t}};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00088\ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{sysmonitor_8h_a74f2da3820be4336d3f6214d5a791e99}{parse\_mem}}(\doxymbox{\hyperlink{structmem__stat__t}{mem\_stat\_t}}\ *mem);}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \textcolor{comment}{//\ \#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\ DISK\ \#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\ }}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \textcolor{preprocessor}{\#define\ MAX\_FS\ 256}}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00100\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordtype}{char}\ \doxymbox{\hyperlink{structdisk__t_adc8009233c595499820b92a7e7d9abfd}{mount}}[512];\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{char}\ \doxymbox{\hyperlink{structdisk__t_a24864a5dfcc5ccacf6468dc34e930254}{fstype}}[100];\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{structdisk__t_a8852f1b8ca639dd36766d69b69fb920b}{pseudo}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structdisk__t_a0d53694a025281f8c131f1c43875a42b}{total\_space}};\ \ \ \ \ }
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structdisk__t_a7f0aaf5293af0032e8e49078a42953e2}{free\_space}};\ \ \ \ \ \ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structdisk__t_a6b9dc8a3c7f261192aa2175607c66eb3}{used\_space}};\ \ \ \ \ \ }
+\DoxyCodeLine{00107\ \}\ \doxymbox{\hyperlink{structdisk__t}{disk\_t}};}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00113\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00114\ \ \ \ \ \doxymbox{\hyperlink{structdisk__t}{disk\_t}}\ *\doxymbox{\hyperlink{structdisks__container_a717c3d539937505071d9b2a4ea4b60c0}{v}};\ \ \ \ \ \ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \doxymbox{\hyperlink{structdisks__container_a854352f53b148adc24983a58a1866d66}{size}};\ \ \ \ }
+\DoxyCodeLine{00116\ \}\ \doxymbox{\hyperlink{structdisks__container}{disks\_container}};}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00122\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structdisk__space_ac3db248c35e11a75b4e99f0087d77c90}{total}};}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structdisk__space_ab2f2e4959367eeaec75e197d0707d1b2}{free}};}
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structdisk__space_ad187eb404c504cfe908d93a6107861e6}{used}};}
+\DoxyCodeLine{00126\ \}\ \doxymbox{\hyperlink{structdisk__space}{disk\_space}};}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00134\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00135\ \ \ \ \ \doxymbox{\hyperlink{structdisk__space}{disk\_space}}\ \doxymbox{\hyperlink{structdisk__choice_ab60883237843989a07894cb782a076bb}{space}};}
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\doxymbox{\hyperlink{structdisk__choice_a7ab9e937048dcfc070b9662a6f17b136}{mount\_point}};}
+\DoxyCodeLine{00137\ \}\ \doxymbox{\hyperlink{structdisk__choice}{disk\_choice}};}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00144\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{sysmonitor_8h_a10ce20e48d96204f0197e4e2ef9b69b1}{is\_pseudo\_fstype}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *s);}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00158\ \doxymbox{\hyperlink{structdisks__container}{disks\_container}}*\ \doxymbox{\hyperlink{sysmonitor_8h_a539dea39ad0e96cd2c8bb0c564a220d4}{retrieve\_fs}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00166\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{sysmonitor_8h_adebd66c23c5d47b1b21b24472a35a6e3}{human\_readable}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ bytes,\ \textcolor{keywordtype}{char}*\ out,\ \textcolor{keywordtype}{size\_t}\ out\_sz);}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00173\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{sysmonitor_8h_a8253838b4b4de0ffe263e31762a66c6e}{compute\_fs\_space}}(\doxymbox{\hyperlink{structdisk__t}{disk\_t}}\ *fs,\ \textcolor{keyword}{struct}\ statvfs\ *stats);}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00182\ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{sysmonitor_8h_a9402e930efb0873e977a17bee9140c44}{pick\_best\_mount\_by\_fstype}}(\textcolor{keyword}{const}\ \doxymbox{\hyperlink{structdisks__container}{disks\_container}}\ *fsv,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *target\_fstype);}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00196\ \doxymbox{\hyperlink{structdisk__choice}{disk\_choice}}\ \doxymbox{\hyperlink{sysmonitor_8h_a2d1e9aa51d1b9fbdb3376d911e821db0}{compute\_choice\_for\_fstype}}(\textcolor{keyword}{const}\ \doxymbox{\hyperlink{structdisks__container}{disks\_container}}\ *fsv,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *target\_fstype);}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \textcolor{comment}{//\ \#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\ PROCESSES\ \#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}}
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00204\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00205\ \ \ \ \ pid\_t\ \doxymbox{\hyperlink{structproc__t_ae0d46a978d5cd6707411f276ad869b9c}{pid}};}
+\DoxyCodeLine{00206\ \ \ \ \ \textcolor{keywordtype}{char}\ \doxymbox{\hyperlink{structproc__t_a8e03167ce04350be901b028cc4cf1ce1}{name}}[256];}
+\DoxyCodeLine{00207\ \ \ \ \ \textcolor{keywordtype}{char}\ \doxymbox{\hyperlink{structproc__t_a5797ba50831ee71f60588abd75d2992e}{state}}[256];}
+\DoxyCodeLine{00208\ \}\ \doxymbox{\hyperlink{structproc__t}{proc\_t}};}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00213\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00214\ \ \ \ \ \doxymbox{\hyperlink{structproc__t}{proc\_t}}\ *\doxymbox{\hyperlink{structproc__v__t_afb7270c66f1c96efd0fc1a291d9c5f49}{ps}};}
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \doxymbox{\hyperlink{structproc__v__t_a5e38ac6a934ea6f4d934e9034769d1ad}{qty}};}
+\DoxyCodeLine{00216\ \}\ \doxymbox{\hyperlink{structproc__v__t}{proc\_v\_t}};}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00238\ \doxymbox{\hyperlink{structproc__v__t}{proc\_v\_t}}*\ \doxymbox{\hyperlink{sysmonitor_8h_a433892ab935a6e118d0b79a4d15ed5fc}{retrieve\_processes}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00250\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{sysmonitor_8h_aab3dfc67fe5fe9e1fa31b3133ddb1c22}{free\_processes}}(\doxymbox{\hyperlink{structproc__v__t}{proc\_v\_t}}\ *psv);}
+\DoxyCodeLine{00251\ }
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \textcolor{comment}{//\ \#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\ NETWORK\ \#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}}
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00255\ \textcolor{preprocessor}{\#define\ MAX\_IFACES\ 20}}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00260\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00261\ \ \ \ \ \textcolor{keywordtype}{char}\ \doxymbox{\hyperlink{structnet__t_a0a2a19b1b0f0f7e68555a4f44b1abc9c}{iface}}[64];}
+\DoxyCodeLine{00262\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structnet__t_a5bf9b58c104bf0ac320e8cbdc59227f4}{rx\_bytes}};}
+\DoxyCodeLine{00263\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structnet__t_a46eda8500213edef2039b5493a02dc50}{tx\_bytes}};}
+\DoxyCodeLine{00264\ \}\ \doxymbox{\hyperlink{structnet__t}{net\_t}};}
+\DoxyCodeLine{00265\ }
+\DoxyCodeLine{00270\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00271\ \ \ \ \ \doxymbox{\hyperlink{structnet__t}{net\_t}}\ *\doxymbox{\hyperlink{structnet__v__t_aac44dfc3ee700f007e26176d50db4584}{vector}};\ \ }
+\DoxyCodeLine{00272\ \ \ \ \ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{structnet__v__t_ad43c3812e6d13e0518d9f8b8f463ffcf}{count}};\ \ \ \ \ \ }
+\DoxyCodeLine{00273\ \}\ \doxymbox{\hyperlink{structnet__v__t}{net\_v\_t}};}
+\DoxyCodeLine{00274\ }
+\DoxyCodeLine{00278\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00279\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structcomputed__net__bytes__t_adb6ef978406100e5dcae259da318edc7}{tot\_received}};}
+\DoxyCodeLine{00280\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{structcomputed__net__bytes__t_a46043e145127dddc36e52a01341f2ae1}{tot\_sent}};}
+\DoxyCodeLine{00281\ \ \ \ \ \textcolor{keywordtype}{double}\ \doxymbox{\hyperlink{structcomputed__net__bytes__t_ab835000984be54805a98c605945d5164}{received\_per\_sec}};}
+\DoxyCodeLine{00282\ \ \ \ \ \textcolor{keywordtype}{double}\ \doxymbox{\hyperlink{structcomputed__net__bytes__t_aea141bbb3c91ed8586663017c55f3880}{sent\_per\_sec}};}
+\DoxyCodeLine{00283\ \}\ \doxymbox{\hyperlink{structcomputed__net__bytes__t}{computed\_net\_bytes\_t}};}
+\DoxyCodeLine{00284\ }
+\DoxyCodeLine{00303\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{sysmonitor_8h_a0c532b8db984d7a8dad0286245712576}{retrieve\_netstat}}(\doxymbox{\hyperlink{structnet__v__t}{net\_v\_t}}\ *retrieved);}
+\DoxyCodeLine{00304\ }
+\DoxyCodeLine{00312\ \doxymbox{\hyperlink{structcomputed__net__bytes__t}{computed\_net\_bytes\_t}}*\ \doxymbox{\hyperlink{sysmonitor_8h_aa87745eabd5d755cfd144a8eb90d61a1}{compute\_used\_bandwidth}}(\doxymbox{\hyperlink{structnet__v__t}{net\_v\_t}}\ *net\_sample1,\ \doxymbox{\hyperlink{structnet__v__t}{net\_v\_t}}\ *net\_sample2);}
+\DoxyCodeLine{00313\ }
+\DoxyCodeLine{00322\ \doxymbox{\hyperlink{structnet__v__t}{net\_v\_t}}*\ \doxymbox{\hyperlink{sysmonitor_8h_aebbe50ee97efa46b8c4a7bbbd6d53b2b}{net\_sample}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00323\ }
+\DoxyCodeLine{00333\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{sysmonitor_8h_a17adef122331f64a5a714a0db1e6a66e}{free\_net}}(\doxymbox{\hyperlink{structnet__v__t}{net\_v\_t}}*\ s1);}
+\DoxyCodeLine{00334\ }
+\DoxyCodeLine{00335\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

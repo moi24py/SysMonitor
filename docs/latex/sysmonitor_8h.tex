@@ -1,0 +1,472 @@
+\doxysection{sysmonitor.\+h File Reference}
+\hypertarget{sysmonitor_8h}{}\label{sysmonitor_8h}\index{sysmonitor.h@{sysmonitor.h}}
+{\ttfamily \+\#include $<$stdio.\+h$>$}\newline
+{\ttfamily \+\#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \+\#include $<$sys/\+statvfs.\+h$>$}\newline
+{\ttfamily \+\#include $<$sys/\+types.\+h$>$}\newline
+{\ttfamily \+\#include $<$stddef.\+h$>$}\newline
+{\ttfamily \+\#include $<$stdlib.\+h$>$}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \doxymbox{\hyperlink{structcpu__stat__t}{cpu\+\_\+stat\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em CPU counters parsed from /\+proc/\+stat. \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structcpu__stat__tot__idle__t}{cpu\+\_\+stat\+\_\+tot\+\_\+idle\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Aggregated CPU times for utilization computation. \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structmem__stat__t}{mem\+\_\+stat\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Memory statistics in bytes. \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structdisk__t}{disk\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Filesystem entry (mount + accounting). \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structdisks__container}{disks\+\_\+container}}
+\begin{DoxyCompactList}\small\item\em Container for an array of filesystem entries. \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structdisk__space}{disk\+\_\+space}}
+\begin{DoxyCompactList}\small\item\em Disk space snapshot in bytes. \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structdisk__choice}{disk\+\_\+choice}}
+\begin{DoxyCompactList}\small\item\em Selected filesystem choice:\+ accounting + mount pointer. \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structproc__t}{proc\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Process information parsed from /\+proc/\+\+[PID]\+/\+state (pid, name, state). \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structproc__v__t}{proc\+\_\+v\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Container for an array of processes and their count. \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structnet__t}{net\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em nterface statistics:\+ received and transmitted bytes. \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structnet__v__t}{net\+\_\+v\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Container for a vector of interfaces plus count. \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structcomputed__net__bytes__t}{computed\+\_\+net\+\_\+bytes\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Computed network bandwidth between two samples. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{sysmonitor_8h_a87cbc7cff225b4ad63d67d47c21f933f}{MAX\+\_\+\+CPUS}}~256
+\item 
+\+\#define \doxymbox{\hyperlink{sysmonitor_8h_ac419b34b5b95aa01a8ba69e184f32028}{MAX\+\_\+\+FS}}~256
+\item 
+\+\#define \doxymbox{\hyperlink{sysmonitor_8h_a10ca4c98a1f6a8ce6d5b6f28a140641b}{MAX\+\_\+\+IFACES}}~20
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \doxymbox{\hyperlink{sysmonitor_8h_a1fc41b88aaa4aa724085d7c282c896bf}{parse\+\_\+stats}} (\doxymbox{\hyperlink{structcpu__stat__t}{cpu\+\_\+stat\+\_\+t}} \texorpdfstring{$\ast$}{*}cpu\+\_\+stat)
+\begin{DoxyCompactList}\small\item\em Parse CPU counters from /\+proc/\+stat. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{structcpu__stat__tot__idle__t}{cpu\+\_\+stat\+\_\+tot\+\_\+idle\+\_\+t}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{sysmonitor_8h_a31702fcf2c3e2487496e3112380754a2}{sum\+\_\+total}} (\doxymbox{\hyperlink{structcpu__stat__t}{cpu\+\_\+stat\+\_\+t}} \texorpdfstring{$\ast$}{*}cpu\+\_\+stats)
+\begin{DoxyCompactList}\small\item\em Compute aggregated total and idle times from one sample. \end{DoxyCompactList}\item 
+double \doxymbox{\hyperlink{sysmonitor_8h_aa40861ee627fa0ad12551bd6f324e7e3}{total\+\_\+\+CPU\+\_\+time}} (\doxymbox{\hyperlink{structcpu__stat__tot__idle__t}{cpu\+\_\+stat\+\_\+tot\+\_\+idle\+\_\+t}} \texorpdfstring{$\ast$}{*}sum1, \doxymbox{\hyperlink{structcpu__stat__tot__idle__t}{cpu\+\_\+stat\+\_\+tot\+\_\+idle\+\_\+t}} \texorpdfstring{$\ast$}{*}sum2)
+\begin{DoxyCompactList}\small\item\em Compute total CPU utilization between two aggregated samples. \end{DoxyCompactList}\item 
+int \doxymbox{\hyperlink{sysmonitor_8h_a74f2da3820be4336d3f6214d5a791e99}{parse\+\_\+mem}} (\doxymbox{\hyperlink{structmem__stat__t}{mem\+\_\+stat\+\_\+t}} \texorpdfstring{$\ast$}{*}mem)
+\begin{DoxyCompactList}\small\item\em Retrieve system memory statistics. \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{sysmonitor_8h_a10ce20e48d96204f0197e4e2ef9b69b1}{is\+\_\+pseudo\+\_\+fstype}} (const char \texorpdfstring{$\ast$}{*}s)
+\begin{DoxyCompactList}\small\item\em Checks if the filesystem type is virtual/\+pseudo. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{structdisks__container}{disks\+\_\+container}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{sysmonitor_8h_a539dea39ad0e96cd2c8bb0c564a220d4}{retrieve\+\_\+fs}} (void)
+\begin{DoxyCompactList}\small\item\em Retrieve mounted filesystems from /\+proc/\+mounts. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{sysmonitor_8h_adebd66c23c5d47b1b21b24472a35a6e3}{human\+\_\+readable}} (unsigned long long bytes, char \texorpdfstring{$\ast$}{*}out, size\+\_\+t out\+\_\+sz)
+\begin{DoxyCompactList}\small\item\em Convert bytes into a human readable string. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{sysmonitor_8h_a8253838b4b4de0ffe263e31762a66c6e}{compute\+\_\+fs\+\_\+space}} (\doxymbox{\hyperlink{structdisk__t}{disk\+\_\+t}} \texorpdfstring{$\ast$}{*}fs, struct statvfs \texorpdfstring{$\ast$}{*}stats)
+\begin{DoxyCompactList}\small\item\em Compute total/\+free/\+used space for a filesystem using statvfs. \end{DoxyCompactList}\item 
+int \doxymbox{\hyperlink{sysmonitor_8h_a9402e930efb0873e977a17bee9140c44}{pick\+\_\+best\+\_\+mount\+\_\+by\+\_\+fstype}} (const \doxymbox{\hyperlink{structdisks__container}{disks\+\_\+container}} \texorpdfstring{$\ast$}{*}fsv, const char \texorpdfstring{$\ast$}{*}target\+\_\+fstype)
+\begin{DoxyCompactList}\small\item\em Picks the filesystem with the greatest total capacity for target\+\_\+fstype. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{structdisk__choice}{disk\+\_\+choice}} \doxymbox{\hyperlink{sysmonitor_8h_a2d1e9aa51d1b9fbdb3376d911e821db0}{compute\+\_\+choice\+\_\+for\+\_\+fstype}} (const \doxymbox{\hyperlink{structdisks__container}{disks\+\_\+container}} \texorpdfstring{$\ast$}{*}fsv, const char \texorpdfstring{$\ast$}{*}target\+\_\+fstype)
+\begin{DoxyCompactList}\small\item\em Choose the best mountpoint matching a filesystem type and compute space stats. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{structproc__v__t}{proc\+\_\+v\+\_\+t}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{sysmonitor_8h_a433892ab935a6e118d0b79a4d15ed5fc}{retrieve\+\_\+processes}} (void)
+\begin{DoxyCompactList}\small\item\em Scan /\+proc/\+$<$pid$>$/\+status for processes within the range \+[0, MAX\+\_\+\+PROCS). \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{sysmonitor_8h_aab3dfc67fe5fe9e1fa31b3133ddb1c22}{free\+\_\+processes}} (\doxymbox{\hyperlink{structproc__v__t}{proc\+\_\+v\+\_\+t}} \texorpdfstring{$\ast$}{*}psv)
+\begin{DoxyCompactList}\small\item\em Free a \doxylink{structproc__v__t}{proc\+\_\+v\+\_\+t} container. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{sysmonitor_8h_a0c532b8db984d7a8dad0286245712576}{retrieve\+\_\+netstat}} (\doxymbox{\hyperlink{structnet__v__t}{net\+\_\+v\+\_\+t}} \texorpdfstring{$\ast$}{*}retrieved)
+\begin{DoxyCompactList}\small\item\em Parse /\+proc/\+net/\+dev and populate a provided container with interfaces and counters. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{structcomputed__net__bytes__t}{computed\+\_\+net\+\_\+bytes\+\_\+t}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{sysmonitor_8h_aa87745eabd5d755cfd144a8eb90d61a1}{compute\+\_\+used\+\_\+bandwidth}} (\doxymbox{\hyperlink{structnet__v__t}{net\+\_\+v\+\_\+t}} \texorpdfstring{$\ast$}{*}net\+\_\+sample1, \doxymbox{\hyperlink{structnet__v__t}{net\+\_\+v\+\_\+t}} \texorpdfstring{$\ast$}{*}net\+\_\+sample2)
+\begin{DoxyCompactList}\small\item\em Compute received/\+transmitted bandwidth between two samples. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{structnet__v__t}{net\+\_\+v\+\_\+t}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{sysmonitor_8h_aebbe50ee97efa46b8c4a7bbbd6d53b2b}{net\+\_\+sample}} (void)
+\begin{DoxyCompactList}\small\item\em Generate a net container and populate its vector with network statistics. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{sysmonitor_8h_a17adef122331f64a5a714a0db1e6a66e}{free\+\_\+net}} (\doxymbox{\hyperlink{structnet__v__t}{net\+\_\+v\+\_\+t}} \texorpdfstring{$\ast$}{*}s1)
+\begin{DoxyCompactList}\small\item\em Free a \doxylink{structnet__v__t}{net\+\_\+v\+\_\+t} container. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{sysmonitor_8h_doc-define-members}
+\Hypertarget{sysmonitor_8h_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{sysmonitor_8h_a87cbc7cff225b4ad63d67d47c21f933f}\index{sysmonitor.h@{sysmonitor.h}!MAX\_CPUS@{MAX\_CPUS}}
+\index{MAX\_CPUS@{MAX\_CPUS}!sysmonitor.h@{sysmonitor.h}}
+\doxysubsubsection{\texorpdfstring{MAX\_CPUS}{MAX\_CPUS}}
+{\footnotesize\ttfamily \label{sysmonitor_8h_a87cbc7cff225b4ad63d67d47c21f933f} 
+\+\#define MAX\+\_\+\+CPUS~256}
+
+\Hypertarget{sysmonitor_8h_ac419b34b5b95aa01a8ba69e184f32028}\index{sysmonitor.h@{sysmonitor.h}!MAX\_FS@{MAX\_FS}}
+\index{MAX\_FS@{MAX\_FS}!sysmonitor.h@{sysmonitor.h}}
+\doxysubsubsection{\texorpdfstring{MAX\_FS}{MAX\_FS}}
+{\footnotesize\ttfamily \label{sysmonitor_8h_ac419b34b5b95aa01a8ba69e184f32028} 
+\+\#define MAX\+\_\+\+FS~256}
+
+\Hypertarget{sysmonitor_8h_a10ca4c98a1f6a8ce6d5b6f28a140641b}\index{sysmonitor.h@{sysmonitor.h}!MAX\_IFACES@{MAX\_IFACES}}
+\index{MAX\_IFACES@{MAX\_IFACES}!sysmonitor.h@{sysmonitor.h}}
+\doxysubsubsection{\texorpdfstring{MAX\_IFACES}{MAX\_IFACES}}
+{\footnotesize\ttfamily \label{sysmonitor_8h_a10ca4c98a1f6a8ce6d5b6f28a140641b} 
+\+\#define MAX\+\_\+\+IFACES~20}
+
+
+
+\label{sysmonitor_8h_doc-func-members}
+\Hypertarget{sysmonitor_8h_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{sysmonitor_8h_a2d1e9aa51d1b9fbdb3376d911e821db0}\index{sysmonitor.h@{sysmonitor.h}!compute\_choice\_for\_fstype@{compute\_choice\_for\_fstype}}
+\index{compute\_choice\_for\_fstype@{compute\_choice\_for\_fstype}!sysmonitor.h@{sysmonitor.h}}
+\doxysubsubsection{\texorpdfstring{compute\_choice\_for\_fstype()}{compute\_choice\_for\_fstype()}}
+{\footnotesize\ttfamily \label{sysmonitor_8h_a2d1e9aa51d1b9fbdb3376d911e821db0} 
+\doxymbox{\hyperlink{structdisk__choice}{disk\+\_\+choice}} compute\+\_\+choice\+\_\+for\+\_\+fstype (\begin{DoxyParamCaption}\item[{const \doxymbox{\hyperlink{structdisks__container}{disks\+\_\+container}} \texorpdfstring{$\ast$}{*}}]{fsv}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{target\+\_\+fstype}{}\end{DoxyParamCaption})}
+
+
+
+Choose the best mountpoint matching a filesystem type and compute space stats. 
+
+Selection policy:\+
+\begin{DoxyItemize}
+\item filters out pseudo filesystems
+\item matches fs type against target\+\_\+fstype
+\item picks the mount with maximum total capacity
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em fsv} & Filesystems container. \\
+\hline
+{\em target\+\_\+fstype} & Filesystem type to evaluate (e.\+g., "{}ext4"{}, "{}fuse.\+vr"{}). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\doxylink{structdisk__choice}{disk\+\_\+choice} with space fields filled; mount\+\_\+point is NULL if nothing matches. 
+\end{DoxyReturn}
+\Hypertarget{sysmonitor_8h_a8253838b4b4de0ffe263e31762a66c6e}\index{sysmonitor.h@{sysmonitor.h}!compute\_fs\_space@{compute\_fs\_space}}
+\index{compute\_fs\_space@{compute\_fs\_space}!sysmonitor.h@{sysmonitor.h}}
+\doxysubsubsection{\texorpdfstring{compute\_fs\_space()}{compute\_fs\_space()}}
+{\footnotesize\ttfamily \label{sysmonitor_8h_a8253838b4b4de0ffe263e31762a66c6e} 
+void compute\+\_\+fs\+\_\+space (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structdisk__t}{disk\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{fs}{, }\item[{struct statvfs \texorpdfstring{$\ast$}{*}}]{stats}{}\end{DoxyParamCaption})}
+
+
+
+Compute total/\+free/\+used space for a filesystem using statvfs. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em fs} & Filesystem entry to update. \\
+\hline
+{\em stats} & Pointer to a struct statvfs filled by statvfs(). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{sysmonitor_8h_aa87745eabd5d755cfd144a8eb90d61a1}\index{sysmonitor.h@{sysmonitor.h}!compute\_used\_bandwidth@{compute\_used\_bandwidth}}
+\index{compute\_used\_bandwidth@{compute\_used\_bandwidth}!sysmonitor.h@{sysmonitor.h}}
+\doxysubsubsection{\texorpdfstring{compute\_used\_bandwidth()}{compute\_used\_bandwidth()}}
+{\footnotesize\ttfamily \label{sysmonitor_8h_aa87745eabd5d755cfd144a8eb90d61a1} 
+\doxymbox{\hyperlink{structcomputed__net__bytes__t}{computed\+\_\+net\+\_\+bytes\+\_\+t}} \texorpdfstring{$\ast$}{*} compute\+\_\+used\+\_\+bandwidth (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structnet__v__t}{net\+\_\+v\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{net\+\_\+sample1}{, }\item[{\doxymbox{\hyperlink{structnet__v__t}{net\+\_\+v\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{net\+\_\+sample2}{}\end{DoxyParamCaption})}
+
+
+
+Compute received/\+transmitted bandwidth between two samples. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em net\+\_\+sample1} & First sample. \\
+\hline
+{\em net\+\_\+sample2} & Second sample. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Allocated computed stats; NULL on failure. 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Caller owns returned memory and must free it. 
+\end{DoxyWarning}
+\Hypertarget{sysmonitor_8h_a17adef122331f64a5a714a0db1e6a66e}\index{sysmonitor.h@{sysmonitor.h}!free\_net@{free\_net}}
+\index{free\_net@{free\_net}!sysmonitor.h@{sysmonitor.h}}
+\doxysubsubsection{\texorpdfstring{free\_net()}{free\_net()}}
+{\footnotesize\ttfamily \label{sysmonitor_8h_a17adef122331f64a5a714a0db1e6a66e} 
+void free\+\_\+net (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structnet__v__t}{net\+\_\+v\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{s1}{}\end{DoxyParamCaption})}
+
+
+
+Free a \doxylink{structnet__v__t}{net\+\_\+v\+\_\+t} container. 
+
+Frees:\+
+\begin{DoxyItemize}
+\item s1-\/\texorpdfstring{$>$}{>}vector (array di \doxylink{structnet__t}{net\+\_\+t})
+\item s1 (il container)
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em s1} & Container da liberare. Safe to call with NULL. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{sysmonitor_8h_aab3dfc67fe5fe9e1fa31b3133ddb1c22}\index{sysmonitor.h@{sysmonitor.h}!free\_processes@{free\_processes}}
+\index{free\_processes@{free\_processes}!sysmonitor.h@{sysmonitor.h}}
+\doxysubsubsection{\texorpdfstring{free\_processes()}{free\_processes()}}
+{\footnotesize\ttfamily \label{sysmonitor_8h_aab3dfc67fe5fe9e1fa31b3133ddb1c22} 
+void free\+\_\+processes (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structproc__v__t}{proc\+\_\+v\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{psv}{}\end{DoxyParamCaption})}
+
+
+
+Free a \doxylink{structproc__v__t}{proc\+\_\+v\+\_\+t} container. 
+
+Frees:\+
+\begin{DoxyItemize}
+\item psv-\/\texorpdfstring{$>$}{>}ps (array di \doxylink{structproc__t}{proc\+\_\+t})
+\item psv (il container)
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em psv} & Container to free. Safe to call with NULL. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{sysmonitor_8h_adebd66c23c5d47b1b21b24472a35a6e3}\index{sysmonitor.h@{sysmonitor.h}!human\_readable@{human\_readable}}
+\index{human\_readable@{human\_readable}!sysmonitor.h@{sysmonitor.h}}
+\doxysubsubsection{\texorpdfstring{human\_readable()}{human\_readable()}}
+{\footnotesize\ttfamily \label{sysmonitor_8h_adebd66c23c5d47b1b21b24472a35a6e3} 
+void human\+\_\+readable (\begin{DoxyParamCaption}\item[{unsigned long long}]{bytes}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{out}{, }\item[{size\+\_\+t}]{out\+\_\+sz}{}\end{DoxyParamCaption})}
+
+
+
+Convert bytes into a human readable string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bytes} & Quantity in bytes. \\
+\hline
+{\em out} & Output buffer. \\
+\hline
+{\em out\+\_\+sz} & Size of output buffer. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{sysmonitor_8h_a10ce20e48d96204f0197e4e2ef9b69b1}\index{sysmonitor.h@{sysmonitor.h}!is\_pseudo\_fstype@{is\_pseudo\_fstype}}
+\index{is\_pseudo\_fstype@{is\_pseudo\_fstype}!sysmonitor.h@{sysmonitor.h}}
+\doxysubsubsection{\texorpdfstring{is\_pseudo\_fstype()}{is\_pseudo\_fstype()}}
+{\footnotesize\ttfamily \label{sysmonitor_8h_a10ce20e48d96204f0197e4e2ef9b69b1} 
+bool is\+\_\+pseudo\+\_\+fstype (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{s}{}\end{DoxyParamCaption})}
+
+
+
+Checks if the filesystem type is virtual/\+pseudo. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & Filesystem type string. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the filesystem is pseudo, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{sysmonitor_8h_aebbe50ee97efa46b8c4a7bbbd6d53b2b}\index{sysmonitor.h@{sysmonitor.h}!net\_sample@{net\_sample}}
+\index{net\_sample@{net\_sample}!sysmonitor.h@{sysmonitor.h}}
+\doxysubsubsection{\texorpdfstring{net\_sample()}{net\_sample()}}
+{\footnotesize\ttfamily \label{sysmonitor_8h_aebbe50ee97efa46b8c4a7bbbd6d53b2b} 
+\doxymbox{\hyperlink{structnet__v__t}{net\+\_\+v\+\_\+t}} \texorpdfstring{$\ast$}{*} net\+\_\+sample (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Generate a net container and populate its vector with network statistics. 
+
+Error handling:\+
+\begin{DoxyItemize}
+\item terminates the program with exit(\+EXIT\+\_\+\+FAILURE) on allocation/\+read/\+open errors. \begin{DoxyReturn}{Returns}
+an allocated net\+\_\+v\+\_\+t\texorpdfstring{$\ast$}{*} and it owns an allocated \doxylink{structnet__t}{net\+\_\+t} vector inside (net\+\_\+container-\/\texorpdfstring{$>$}{>}vector) 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Caller must release both via \doxylink{sysmonitor_8h_a17adef122331f64a5a714a0db1e6a66e}{free\+\_\+net()}. 
+\end{DoxyWarning}
+
+\end{DoxyItemize}\Hypertarget{sysmonitor_8h_a74f2da3820be4336d3f6214d5a791e99}\index{sysmonitor.h@{sysmonitor.h}!parse\_mem@{parse\_mem}}
+\index{parse\_mem@{parse\_mem}!sysmonitor.h@{sysmonitor.h}}
+\doxysubsubsection{\texorpdfstring{parse\_mem()}{parse\_mem()}}
+{\footnotesize\ttfamily \label{sysmonitor_8h_a74f2da3820be4336d3f6214d5a791e99} 
+int parse\+\_\+mem (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structmem__stat__t}{mem\+\_\+stat\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{mem}{}\end{DoxyParamCaption})}
+
+
+
+Retrieve system memory statistics. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mem} & Output structure to fill. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+EXIT\+\_\+\+SUCCESS on success, EXIT\+\_\+\+FAILURE on failure 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+unit:\+ kB 
+\end{DoxyNote}
+\Hypertarget{sysmonitor_8h_a1fc41b88aaa4aa724085d7c282c896bf}\index{sysmonitor.h@{sysmonitor.h}!parse\_stats@{parse\_stats}}
+\index{parse\_stats@{parse\_stats}!sysmonitor.h@{sysmonitor.h}}
+\doxysubsubsection{\texorpdfstring{parse\_stats()}{parse\_stats()}}
+{\footnotesize\ttfamily \label{sysmonitor_8h_a1fc41b88aaa4aa724085d7c282c896bf} 
+int parse\+\_\+stats (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structcpu__stat__t}{cpu\+\_\+stat\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{cpu\+\_\+stat}{}\end{DoxyParamCaption})}
+
+
+
+Parse CPU counters from /\+proc/\+stat. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cpu\+\_\+stat} & Output structure to fill with counters. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Number of CPUs parsed, or 0 on failure. 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+unit:\+ jiffies 
+\end{DoxyNote}
+\Hypertarget{sysmonitor_8h_a9402e930efb0873e977a17bee9140c44}\index{sysmonitor.h@{sysmonitor.h}!pick\_best\_mount\_by\_fstype@{pick\_best\_mount\_by\_fstype}}
+\index{pick\_best\_mount\_by\_fstype@{pick\_best\_mount\_by\_fstype}!sysmonitor.h@{sysmonitor.h}}
+\doxysubsubsection{\texorpdfstring{pick\_best\_mount\_by\_fstype()}{pick\_best\_mount\_by\_fstype()}}
+{\footnotesize\ttfamily \label{sysmonitor_8h_a9402e930efb0873e977a17bee9140c44} 
+int pick\+\_\+best\+\_\+mount\+\_\+by\+\_\+fstype (\begin{DoxyParamCaption}\item[{const \doxymbox{\hyperlink{structdisks__container}{disks\+\_\+container}} \texorpdfstring{$\ast$}{*}}]{fsv}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{target\+\_\+fstype}{}\end{DoxyParamCaption})}
+
+
+
+Picks the filesystem with the greatest total capacity for target\+\_\+fstype. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em fsv} & Array/\+container of mountpoints. \\
+\hline
+{\em target\+\_\+fstype} & Filesystem type to evaluate. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Index of the best mount, or -\/1 if not found. 
+\end{DoxyReturn}
+\Hypertarget{sysmonitor_8h_a539dea39ad0e96cd2c8bb0c564a220d4}\index{sysmonitor.h@{sysmonitor.h}!retrieve\_fs@{retrieve\_fs}}
+\index{retrieve\_fs@{retrieve\_fs}!sysmonitor.h@{sysmonitor.h}}
+\doxysubsubsection{\texorpdfstring{retrieve\_fs()}{retrieve\_fs()}}
+{\footnotesize\ttfamily \label{sysmonitor_8h_a539dea39ad0e96cd2c8bb0c564a220d4} 
+\doxymbox{\hyperlink{structdisks__container}{disks\+\_\+container}} \texorpdfstring{$\ast$}{*} retrieve\+\_\+fs (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Retrieve mounted filesystems from /\+proc/\+mounts. 
+
+The returned container includes both real and pseudo filesystems; pseudo ones are marked through \doxylink{structdisk__t_a8852f1b8ca639dd36766d69b69fb920b}{disk\+\_\+t::\+pseudo}.
+
+Error handling:\+
+\begin{DoxyItemize}
+\item terminates the program with exit(\+EXIT\+\_\+\+FAILURE) on allocation/\+read/\+open/\+close errors.
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Returns}
+disks\+\_\+container\texorpdfstring{$\ast$}{*} allocated by the function. Caller must free it. 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Caller owns it and must free it 
+\end{DoxyWarning}
+\Hypertarget{sysmonitor_8h_a0c532b8db984d7a8dad0286245712576}\index{sysmonitor.h@{sysmonitor.h}!retrieve\_netstat@{retrieve\_netstat}}
+\index{retrieve\_netstat@{retrieve\_netstat}!sysmonitor.h@{sysmonitor.h}}
+\doxysubsubsection{\texorpdfstring{retrieve\_netstat()}{retrieve\_netstat()}}
+{\footnotesize\ttfamily \label{sysmonitor_8h_a0c532b8db984d7a8dad0286245712576} 
+void retrieve\+\_\+netstat (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structnet__v__t}{net\+\_\+v\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{retrieved}{}\end{DoxyParamCaption})}
+
+
+
+Parse /\+proc/\+net/\+dev and populate a provided container with interfaces and counters. 
+
+Precondition:\+
+\begin{DoxyItemize}
+\item retrieved != NULL
+\item retrieved-\/\texorpdfstring{$>$}{>}vector points to an allocated array of at least MAX\+\_\+\+IFACES \doxylink{structnet__t}{net\+\_\+t} elements
+\item retrieved-\/\texorpdfstring{$>$}{>}count is initialized to 0 by the caller (typically in \doxylink{sysmonitor_8h_aebbe50ee97efa46b8c4a7bbbd6d53b2b}{net\+\_\+sample()}).
+\end{DoxyItemize}
+
+Postcondition:\+
+\begin{DoxyItemize}
+\item retrieved-\/\texorpdfstring{$>$}{>}count is updated with the number of parsed interfaces.
+\end{DoxyItemize}
+
+Error handling:\+
+\begin{DoxyItemize}
+\item On open/\+read/\+close errors, terminates with exit(\+EXIT\+\_\+\+FAILURE) (consistent with project style).
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em retrieved} & Output container to populate. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+retrieved-\/\texorpdfstring{$>$}{>}count The number of parsed interfaces. 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+Interface names in /\+proc/\+net/\+dev can contain characters up to \textquotesingle{}:\+\textquotesingle{} delimiter. 
+\end{DoxyNote}
+\Hypertarget{sysmonitor_8h_a433892ab935a6e118d0b79a4d15ed5fc}\index{sysmonitor.h@{sysmonitor.h}!retrieve\_processes@{retrieve\_processes}}
+\index{retrieve\_processes@{retrieve\_processes}!sysmonitor.h@{sysmonitor.h}}
+\doxysubsubsection{\texorpdfstring{retrieve\_processes()}{retrieve\_processes()}}
+{\footnotesize\ttfamily \label{sysmonitor_8h_a433892ab935a6e118d0b79a4d15ed5fc} 
+\doxymbox{\hyperlink{structproc__v__t}{proc\+\_\+v\+\_\+t}} \texorpdfstring{$\ast$}{*} retrieve\+\_\+processes (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Scan /\+proc/\+$<$pid$>$/\+status for processes within the range \+[0, MAX\+\_\+\+PROCS). 
+
+For each PID successfully read, extracts:\+
+\begin{DoxyItemize}
+\item Name
+\item State
+\item Pid
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Returns}
+proc\+\_\+v\+\_\+t\texorpdfstring{$\ast$}{*} allocated container:\+
+\begin{DoxyItemize}
+\item psv-\/\texorpdfstring{$>$}{>}ps is an allocated array of \doxylink{structproc__t}{proc\+\_\+t}
+\item psv-\/\texorpdfstring{$>$}{>}qty is the number of valid entries
+\item If no process if found:\+ returns a container where psv-\/\texorpdfstring{$>$}{>}qty == 0 and psv-\/\texorpdfstring{$>$}{>}ps == NULL.
+\end{DoxyItemize}
+\end{DoxyReturn}
+Error handling:\+
+\begin{DoxyItemize}
+\item terminates the program with exit(\+EXIT\+\_\+\+FAILURE) on allocation failures.
+\end{DoxyItemize}
+
+\begin{DoxyWarning}{Warning}
+Caller must free the returned container with \doxylink{sysmonitor_8h_aab3dfc67fe5fe9e1fa31b3133ddb1c22}{free\+\_\+processes()}. 
+\end{DoxyWarning}
+\begin{DoxyNote}{Note}
+If no process is found, returns a proc\+\_\+v\+\_\+t\texorpdfstring{$\ast$}{*} with psv-\/\texorpdfstring{$>$}{>}ps == NULL and psv-\/\texorpdfstring{$>$}{>}qty == 0. 
+\end{DoxyNote}
+\Hypertarget{sysmonitor_8h_a31702fcf2c3e2487496e3112380754a2}\index{sysmonitor.h@{sysmonitor.h}!sum\_total@{sum\_total}}
+\index{sum\_total@{sum\_total}!sysmonitor.h@{sysmonitor.h}}
+\doxysubsubsection{\texorpdfstring{sum\_total()}{sum\_total()}}
+{\footnotesize\ttfamily \label{sysmonitor_8h_a31702fcf2c3e2487496e3112380754a2} 
+\doxymbox{\hyperlink{structcpu__stat__tot__idle__t}{cpu\+\_\+stat\+\_\+tot\+\_\+idle\+\_\+t}} \texorpdfstring{$\ast$}{*} sum\+\_\+total (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structcpu__stat__t}{cpu\+\_\+stat\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{cpu\+\_\+stats}{}\end{DoxyParamCaption})}
+
+
+
+Compute aggregated total and idle times from one sample. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cpu\+\_\+stats} & Sample counters (e.\+g., "{}current"{}). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Allocated pointer containing total/\+idle values; NULL on failure. 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Caller owns returned memory and must free it. 
+\end{DoxyWarning}
+\Hypertarget{sysmonitor_8h_aa40861ee627fa0ad12551bd6f324e7e3}\index{sysmonitor.h@{sysmonitor.h}!total\_CPU\_time@{total\_CPU\_time}}
+\index{total\_CPU\_time@{total\_CPU\_time}!sysmonitor.h@{sysmonitor.h}}
+\doxysubsubsection{\texorpdfstring{total\_CPU\_time()}{total\_CPU\_time()}}
+{\footnotesize\ttfamily \label{sysmonitor_8h_aa40861ee627fa0ad12551bd6f324e7e3} 
+double total\+\_\+\+CPU\+\_\+time (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structcpu__stat__tot__idle__t}{cpu\+\_\+stat\+\_\+tot\+\_\+idle\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{sum1}{, }\item[{\doxymbox{\hyperlink{structcpu__stat__tot__idle__t}{cpu\+\_\+stat\+\_\+tot\+\_\+idle\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{sum2}{}\end{DoxyParamCaption})}
+
+
+
+Compute total CPU utilization between two aggregated samples. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sum1} & First aggregated sample (baseline). \\
+\hline
+{\em sum2} & Second aggregated sample (later). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+CPU usage as percentage in range \+[0, 100]\+. 
+\end{DoxyReturn}
