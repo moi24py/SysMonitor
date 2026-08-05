@@ -11,7 +11,7 @@ It displays:
 - Network bandwidth (used bandwidth)
 
 ## Screenshot
-![System monitor output](images/output.png)
+![System monitor output](docs/images/output.png)
 
 # Requirements
 - Ubuntu 24.10 (tested)
